@@ -26,17 +26,17 @@ public:
 
 	void capture();
 
-	bool isKeyPressed(OIS::KeyCode keyCode) const;
-
-private:
-	OIS::InputManager* inputManager;
-	OIS::Keyboard* keyboard;
-	OIS::Mouse* mouse;
-
 	virtual bool keyPressed(const OIS::KeyEvent& event) override;
 	virtual bool keyReleased(const OIS::KeyEvent& event) override;
 
 	virtual bool mouseMoved(const OIS::MouseEvent& event) override;
 	virtual bool mousePressed(const OIS::MouseEvent& event, OIS::MouseButtonID id) override;
 	virtual bool mouseReleased(const OIS::MouseEvent& event, OIS::MouseButtonID id) override;
+
+	bool isKeyPressed(OIS::KeyCode keyCode) const;
+
+private:
+	OIS::InputManager* inputManager;
+	OIS::Keyboard* keyboard;
+	OIS::Mouse* mouse;
 };

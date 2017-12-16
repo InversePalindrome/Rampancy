@@ -19,9 +19,15 @@ InversePalindrome.com
 #include <OGRE/OgreFrameListener.h>
 #include <OGRE/OgreWindowEventUtilities.h>
 
+#include <hsm.h>
+
+
+class State;
 
 class Application : public Ogre::FrameListener, public Ogre::WindowEventListener
 {
+	friend class State;
+
 public:
 	Application();
 	Application(const Application&) = delete;
@@ -42,7 +48,15 @@ private:
 
 	InputManager inputManager;
 
+	hsm::StateMachine stateMachine;
+
+	bool changeState;
 	bool shutdown;
 
-	void handleEvents();
+	void handleEvent();
+	void update();
+	void render();
+
+	void loadResources();
+	void setupCamera();
 };
