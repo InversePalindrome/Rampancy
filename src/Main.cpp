@@ -11,6 +11,6 @@ InversePalindrome.com
 int main()
 {
 	Application app;
-
+	
 	app.run();
 }
