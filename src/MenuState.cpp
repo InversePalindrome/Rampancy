@@ -6,16 +6,45 @@ InversePalindrome.com
 
 
 #include "MenuState.hpp"
+#include "GameState.hpp"
 
 
 void MenuState::OnEnter()
 {
-	this->setChangeState(false);
+	this->playButton = this->getGui()->createWidget<MyGUI::Button>("Button", this->getWindow()->getWidth() / 2 - 125, 
+		300, 250, 50, MyGUI::Align::Default, "Main");
+	this->playButton->setCaption("Play");
+	this->playButton->eventMouseButtonClick += MyGUI::newDelegate(this, &MenuState::transitionToGame);
 
-	auto* entity = this->getSceneManager()->createEntity("Robot", "");
+	this->settingsButton = this->getGui()->createWidget<MyGUI::Button>("Button", this->getWindow()->getWidth() / 2 - 125,
+		400, 250, 50, MyGUI::Align::Default, "Main");
+	this->settingsButton->setCaption("Settings");
+	this->settingsButton->eventMouseButtonClick += MyGUI::newDelegate(this, &MenuState::transitionToSettings);
+
+	this->quitButton = this->getGui()->createWidget<MyGUI::Button>("Button", this->getWindow()->getWidth() / 2 - 125,
+		500, 250, 50, MyGUI::Align::Default, "Main");
+	this->quitButton->setCaption("Quit");
+	this->quitButton->eventMouseButtonClick += MyGUI::newDelegate(this, &MenuState::quitApp);
 }
 
 void MenuState::OnExit()
 {
+	this->getGui()->destroyWidget(this->playButton);
+	this->getGui()->destroyWidget(this->settingsButton);
+	this->getGui()->destroyWidget(this->quitButton);
+}
 
+void MenuState::transitionToGame(MyGUI::WidgetPtr playButton)
+{
+	this->setStateTransition(States::Game);
+}
+
+void MenuState::transitionToSettings(MyGUI::WidgetPtr settingsButton)
+{
+	this->setStateTransition(States::Settings);
+}
+
+void MenuState::quitApp(MyGUI::WidgetPtr quitButton)
+{
+	this->setShutdown(true);
 }

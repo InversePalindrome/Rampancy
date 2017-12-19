@@ -19,7 +19,7 @@ Application::Application() :
 	camera(nullptr),
 	gui(new MyGUI::Gui()),
 	guiPlatform(new MyGUI::OgrePlatform()),
-	changeState(false),
+    stateTransition(States::None),
 	shutdown(false)
 {
 	if (root->showConfigDialog())
@@ -68,13 +68,8 @@ void Application::run()
 void Application::handleEvent()
 {
 	Ogre::WindowEventUtilities::messagePump();
-
+	
 	this->inputManager.capture();
-
-	if (this->inputManager.isKeyPressed(OIS::KC_ESCAPE))
-	{
-		this->shutdown = true;
-	}
 }
 
 void Application::update()
@@ -92,7 +87,15 @@ void Application::loadResources()
 {
 	Ogre::ConfigFile cf;
 	
-	cf.load("resources_d.cfg");
+	Ogre::String resourceFile;
+
+    #ifdef _DEBUG
+	resourceFile = "resources_d.cfg";
+    #else
+	resourceFile = "resources.cfg";
+    #endif 
+
+	cf.load(resourceFile);
 
 	auto seci = cf.getSectionIterator();
 

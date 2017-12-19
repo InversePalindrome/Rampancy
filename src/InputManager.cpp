@@ -15,7 +15,7 @@ void InputManager::initialise(Ogre::RenderWindow* window)
 	std::size_t windowHandle = 0u;
 
 	window->getCustomAttribute("WINDOW", &windowHandle);
-
+	
 	this->inputManager = OIS::InputManager::createInputSystem(windowHandle);
 	this->keyboard = static_cast<OIS::Keyboard*>(inputManager->createInputObject(OIS::OISKeyboard, true));
 	this->mouse = static_cast<OIS::Mouse*>(inputManager->createInputObject(OIS::OISMouse, true));
