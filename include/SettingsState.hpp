@@ -1,6 +1,6 @@
 /*
 Copyright (c) 2017 InversePalindrome
-Rampancy - StartState.hpp
+Rampancy - SettingsState.cpp
 InversePalindrome.com
 */
 
@@ -9,17 +9,17 @@ InversePalindrome.com
 
 #include "State.hpp"
 
-#include <MYGUI/MyGUI_TextBox.h>
+#include <MyGUI/MyGUI_Button.h>
 
 
-class StartState : public State
+class SettingsState : public State
 {
 public:
 	virtual void OnEnter() override;
 	virtual void OnExit() override;
 
-	virtual void Update() override;
-
 private:
-	MyGUI::TextBox* startText;
+	MyGUI::ButtonPtr backButton;
+
+    void transitionBack(MyGUI::WidgetPtr backButton);
 };

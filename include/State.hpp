@@ -15,11 +15,13 @@ InversePalindrome.com
 class State : public hsm::State
 {
 public:
+	virtual hsm::Transition GetTransition() override;
+
 	Ogre::RenderWindow* getWindow();
 	MyGUI::Gui* getGui();
 	Ogre::SceneManager* getSceneManager();
 	InputManager& getInputManager();
-	bool getChangeState();
 
-	void setChangeState(bool changeState);
+	void setShutdown(bool shutdown);
+	void setStateTransition(States stateTransition);
 };

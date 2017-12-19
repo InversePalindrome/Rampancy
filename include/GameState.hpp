@@ -1,6 +1,6 @@
 /*
 Copyright (c) 2017 InversePalindrome
-Rampancy - StartState.hpp
+Rampancy - GameState.hpp
 InversePalindrome.com
 */
 
@@ -9,17 +9,21 @@ InversePalindrome.com
 
 #include "State.hpp"
 
-#include <MYGUI/MyGUI_TextBox.h>
+#include <entityx/entityx.h>
 
 
-class StartState : public State
+class GameState : public State
 {
 public:
+	GameState();
+
 	virtual void OnEnter() override;
 	virtual void OnExit() override;
 
 	virtual void Update() override;
 
 private:
-	MyGUI::TextBox* startText;
+	entityx::EventManager eventManager;
+	entityx::EntityManager entityManager;
+	entityx::SystemManager systemManager;
 };
