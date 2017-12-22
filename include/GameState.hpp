@@ -8,6 +8,7 @@ InversePalindrome.com
 #pragma once
 
 #include "State.hpp"
+#include "EntityParser.hpp"
 
 #include <entityx/entityx.h>
 
@@ -26,4 +27,6 @@ private:
 	entityx::EventManager eventManager;
 	entityx::EntityManager entityManager;
 	entityx::SystemManager systemManager;
+
+	EntityParser entityParser;
 };
