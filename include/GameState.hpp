@@ -9,6 +9,7 @@ InversePalindrome.com
 
 #include "State.hpp"
 #include "EntityParser.hpp"
+#include "PauseDisplay.hpp"
 
 #include <entityx/entityx.h>
 
@@ -21,6 +22,8 @@ public:
 	virtual void OnEnter() override;
 	virtual void OnExit() override;
 
+	virtual hsm::Transition GetTransition() override;
+
 	virtual void Update() override;
 
 private:
@@ -29,4 +32,6 @@ private:
 	entityx::SystemManager systemManager;
 
 	EntityParser entityParser;
+
+	PauseDisplay pauseDisplay;
 };

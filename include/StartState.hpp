@@ -18,6 +18,8 @@ public:
 	virtual void OnEnter() override;
 	virtual void OnExit() override;
 
+	virtual hsm::Transition GetTransition() override;
+
 	virtual void Update() override;
 
 private:

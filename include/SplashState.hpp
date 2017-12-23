@@ -19,6 +19,8 @@ public:
 	virtual void OnEnter() override;
 	virtual void OnExit() override;
 
+	virtual hsm::Transition GetTransition() override;
+
 private:
 	MyGUI::ImageBox* splashScreen;
 	CallbackTimer splashTimer;

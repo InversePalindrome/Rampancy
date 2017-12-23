@@ -14,15 +14,14 @@ InversePalindrome.com
 
 class State : public hsm::State
 {
-protected:
-	virtual hsm::Transition GetTransition() override;
-
+public:
 	Ogre::RenderWindow* getWindow();
 	MyGUI::Gui* getGui();
 	Ogre::Camera* getCamera();
 	Ogre::SceneManager* getSceneManager();
 	InputManager& getInputManager();
+	StateTransition getStateTransition();
 
 	void setShutdown(bool shutdown);
-	void setStateTransition(States stateTransition);
+	void setStateTransition(StateTransition stateTransition);
 };

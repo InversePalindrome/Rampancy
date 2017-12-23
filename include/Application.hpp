@@ -8,7 +8,7 @@ InversePalindrome.com
 #pragma once
 
 #include "InputManager.hpp"
-#include "States.hpp"
+#include "StateTransitions.hpp"
 
 #include <hsm.h>
 
@@ -21,6 +21,8 @@ InversePalindrome.com
 #include <OGRE/OgreCamera.h>
 #include <OGRE/OgreFrameListener.h>
 #include <OGRE/OgreWindowEventUtilities.h>
+
+#include <vector>
 
 
 class Application : public Ogre::FrameListener, public Ogre::WindowEventListener
@@ -49,7 +51,7 @@ private:
 
 	hsm::StateMachine stateMachine;
 
-	States stateTransition;
+	StateTransition stateTransition;
 
 	bool shutdown;
 

@@ -19,7 +19,8 @@ class EntityParser
 public:
 	EntityParser(entityx::EntityManager& entityManager);
 
-	void parseEntity(const std::string& fileName);
+	entityx::Entity parseEntity(const std::string& fileName);
+	void parseEntities(const std::string& fileNames);
 
 	void setSceneManager(Ogre::SceneManager* sceneManager);
 

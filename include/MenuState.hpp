@@ -18,6 +18,8 @@ public:
 	virtual void OnExit() override;
 	virtual void OnEnter() override;
 
+	virtual hsm::Transition GetTransition() override;
+
 private:
 	MyGUI::ButtonPtr playButton;
 	MyGUI::ButtonPtr settingsButton;
