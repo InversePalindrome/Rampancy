@@ -34,14 +34,24 @@ void MenuState::OnExit()
 	this->getGui()->destroyWidget(this->quitButton);
 }
 
+hsm::Transition MenuState::GetTransition()
+{
+	if (this->getStateTransition() == StateTransition::Game)
+	{
+		return hsm::SiblingTransition<GameState>();
+	}
+
+	return hsm::NoTransition();
+}
+
 void MenuState::transitionToGame(MyGUI::WidgetPtr playButton)
 {
-	this->setStateTransition(States::Game);
+	this->setStateTransition(StateTransition::Game);
 }
 
 void MenuState::transitionToSettings(MyGUI::WidgetPtr settingsButton)
 {
-	this->setStateTransition(States::Settings);
+	this->setStateTransition(StateTransition::Settings);
 }
 
 void MenuState::quitApp(MyGUI::WidgetPtr quitButton)

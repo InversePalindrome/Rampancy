@@ -6,7 +6,7 @@ InversePalindrome.com
 
 
 #include "GameState.hpp"
-#include "PauseState.hpp"
+#include "MenuState.hpp"
 #include "PhysicsSystem.hpp"
 
 
@@ -23,7 +23,11 @@ GameState::GameState() :
 void GameState::OnEnter()
 {
 	this->entityParser.setSceneManager(this->getSceneManager());
-	this->entityParser.parseEntity("Data/Entities/Ogre.xml");
+
+	this->pauseDisplay.initialise(this);
+	this->pauseDisplay.setVisible(false);
+	
+	this->entityParser.parseEntities("entities.xml");
 }
 
 void GameState::OnExit()
@@ -31,11 +35,21 @@ void GameState::OnExit()
 	this->getSceneManager()->clearScene();
 }
 
+hsm::Transition GameState::GetTransition()
+{
+	if (this->getStateTransition() == StateTransition::Menu)
+	{
+		return hsm::SiblingTransition<MenuState>();
+	}
+
+	return hsm::NoTransition();
+}
+
 void GameState::Update()
 {
 	if (this->getInputManager().isKeyPressed(OIS::KC_ESCAPE))
-	{
-		this->setStateTransition(States::Pause);
+	{	
+		this->pauseDisplay.setVisible(true);
 	}
 
     this->systemManager.update_all(0);

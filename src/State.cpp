@@ -6,40 +6,7 @@ InversePalindrome.com
 
 
 #include "State.hpp"
-#include "States.hpp"
-#include "SplashState.hpp"
-#include "StartState.hpp"
-#include "MenuState.hpp"
-#include "GameState.hpp"
-#include "SettingsState.hpp"
-#include "PauseState.hpp"
 
-
-hsm::Transition State::GetTransition()
-{
-	auto* app = reinterpret_cast<Application*>(GetStateMachine().GetOwner());
-
-	auto currentTransition = app->stateTransition;
-	app->stateTransition = States::None;
-
-	switch (currentTransition)
-	{
-	case States::Splash:
-		return hsm::SiblingTransition<SplashState>();
-	case States::Start:
-		return hsm::SiblingTransition<StartState>();
-	case States::Menu:
-		return hsm::SiblingTransition<MenuState>();
-	case States::Game:
-		return hsm::SiblingTransition<GameState>();
-	case States::Settings:
-		return hsm::SiblingTransition<SettingsState>();
-	case States::Pause:
-		return hsm::SiblingTransition<PauseState>();
-	}
-
-	return hsm::NoTransition();
-}
 
 Ogre::RenderWindow* State::getWindow()
 {
@@ -66,12 +33,17 @@ InputManager& State::getInputManager()
 	return reinterpret_cast<Application*>(GetStateMachine().GetOwner())->inputManager;
 }
 
+StateTransition State::getStateTransition() 
+{
+	return reinterpret_cast<Application*>(GetStateMachine().GetOwner())->stateTransition;
+}
+
 void State::setShutdown(bool shutdown)
 {
 	reinterpret_cast<Application*>(GetStateMachine().GetOwner())->shutdown = shutdown;
 }
 
-void State::setStateTransition(States stateTransition)
+void State::setStateTransition(StateTransition stateTransition)
 {
 	reinterpret_cast<Application*>(GetStateMachine().GetOwner())->stateTransition = stateTransition;
 }

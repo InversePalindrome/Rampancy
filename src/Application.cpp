@@ -19,7 +19,7 @@ Application::Application() :
 	camera(nullptr),
 	gui(new MyGUI::Gui()),
 	guiPlatform(new MyGUI::OgrePlatform()),
-    stateTransition(States::None),
+    stateTransition(StateTransition::None),
 	shutdown(false)
 {
 	if (root->showConfigDialog())

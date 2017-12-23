@@ -20,7 +20,7 @@ void SplashState::OnEnter()
 	
 	this->splashTimer.addCallback([this](const auto& error)
 	{
-		this->setStateTransition(States::Start);
+		this->setStateTransition(StateTransition::Start);
 	}
 	, splashTime);
 }
@@ -28,4 +28,14 @@ void SplashState::OnEnter()
 void SplashState::OnExit()
 {
 	this->getGui()->destroyWidget(this->splashScreen);
+}
+
+hsm::Transition SplashState::GetTransition()
+{
+	if (this->getStateTransition() == StateTransition::Start)
+	{
+		return hsm::SiblingTransition<StartState>();
+	}
+
+	return hsm::NoTransition();
 }

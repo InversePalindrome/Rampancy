@@ -24,5 +24,5 @@ void SettingsState::OnExit()
 
 void SettingsState::transitionBack(MyGUI::WidgetPtr backButton)
 {
-	this->setStateTransition(States::Menu);
+	this->setStateTransition(StateTransition::Menu);
 }

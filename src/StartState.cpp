@@ -7,6 +7,7 @@ InversePalindrome.com
 
 #include "StartState.hpp"
 #include "MenuState.hpp"
+#include "SplashState.hpp"
 
 
 void StartState::OnEnter()
@@ -36,11 +37,22 @@ void StartState::OnExit()
 	this->getSceneManager()->clearScene();
 }
 
+
+hsm::Transition StartState::GetTransition() 
+{
+	if (this->getStateTransition() == StateTransition::Menu)
+	{
+		return hsm::SiblingTransition<MenuState>();
+	}
+
+	return hsm::NoTransition();
+}
+
 void StartState::Update()
 {
 	if (this->getInputManager().isKeyPressed(OIS::KC_SPACE))
 	{
-		this->setStateTransition(States::Menu);
+		this->setStateTransition(StateTransition::Menu);
 	}
 
 	this->getSceneManager()->getSceneNode("Ogre")->rotate(Ogre::Vector3::UNIT_Y, Ogre::Degree(0.1f));
