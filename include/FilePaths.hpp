@@ -14,4 +14,5 @@ namespace FP
 {
 	extern std::string data;
 	extern std::string entities;
+	extern std::string settings;
 }

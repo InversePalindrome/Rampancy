@@ -15,12 +15,14 @@ InversePalindrome.com
 class PhysicsComponent
 {
 public:
-	PhysicsComponent(Shape shape, btScalar mass);
+	PhysicsComponent(Shape shape, btScalar mass, float impulse, float damping);
 	~PhysicsComponent();
 
 	btRigidBody* getBody();
 	Shape getShape() const;
 	btScalar getMass() const;
+	float getImpulse() const;
+	float getDamping() const;
 
 	void setBody(btRigidBody* body);
 
@@ -28,4 +30,6 @@ private:
 	btRigidBody * body;
 	Shape shape;
 	btScalar mass;
+	float impulse;
+	float damping;
 };

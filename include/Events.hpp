@@ -6,3 +6,14 @@ InversePalindrome.com
 
 
 #pragma once
+
+#include "Direction.hpp"
+
+#include <entityx/Entity.h>
+
+
+struct ChangeDirection
+{
+	entityx::Entity entity;
+	Direction direction;
+};
