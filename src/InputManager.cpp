@@ -6,8 +6,11 @@ InversePalindrome.com
 
 
 #include "InputManager.hpp"
+#include "FilePaths.hpp"
 
 #include <MYGUI/MyGUI_InputManager.h>
+
+#include <RapidXML/rapidxml.hpp>
 
 
 void InputManager::initialise(Ogre::RenderWindow* window)
@@ -31,6 +34,8 @@ void InputManager::initialise(Ogre::RenderWindow* window)
 
 	this->keyboard->setEventCallback(this);
 	this->mouse->setEventCallback(this);
+
+	this->loadKeyBindings();
 }
 
 InputManager::~InputManager()
@@ -47,6 +52,11 @@ void InputManager::capture()
 		this->keyboard->capture();
 		this->mouse->capture();
 	}
+}
+
+void InputManager::setAction(Action action, OIS::KeyCode code)
+{
+	this->keyBindings[action] = code;
 }
 
 bool InputManager::keyPressed(const OIS::KeyEvent& event)
@@ -84,12 +94,59 @@ bool InputManager::mouseReleased(const OIS::MouseEvent& event, OIS::MouseButtonI
 	return true;
 }
 
-bool InputManager::isKeyPressed(OIS::KeyCode keyCode) const
+bool InputManager::isActive(Action action) const
 {
 	if (this->keyboard)
 	{
-		return this->keyboard->isKeyDown(keyCode);
+		return this->keyboard->isKeyDown(this->keyBindings.at(action));
 	}
 
 	return false;
+}
+
+bool InputManager::isKeyPressed() const
+{
+	if (this->keyboard)
+	{
+		for (std::size_t i = OIS::KeyCode::KC_UNASSIGNED; i <= OIS::KC_MEDIASELECT; ++i)
+		{
+			if (this->keyboard->isKeyDown(static_cast<OIS::KeyCode>(i)))
+			{
+				return true;
+			}
+		}
+	}
+	
+	return false;
+}
+
+
+void InputManager::loadKeyBindings()
+{
+
+	rapidxml::xml_document<> doc;
+	std::ifstream inFile(FP::settings + "actions.xml");
+	std::ostringstream buffer;
+
+	buffer << inFile.rdbuf();
+	inFile.close();
+
+	std::string content(buffer.str());
+	doc.parse<0>(&content[0]);
+
+	auto* rootNode = doc.first_node("Settings");
+
+	if (rootNode)
+	{
+		for (auto* node = rootNode->first_node("Key"); node; node = node->next_sibling())
+		{
+			std::size_t action= 0u, keyCode = 0u;
+
+			std::stringstream stream;
+			stream << node->first_attribute("action")->value() << ' ' << node->first_attribute("code")->value();
+			stream >> action >> keyCode;
+
+			this->keyBindings[static_cast<Action>(action)] = static_cast<OIS::KeyCode>(keyCode);
+		}
+	}
 }

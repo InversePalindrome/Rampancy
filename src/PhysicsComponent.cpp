@@ -8,10 +8,12 @@ InversePalindrome.com
 #include "PhysicsComponent.hpp"
 
 
-PhysicsComponent::PhysicsComponent(Shape shape, btScalar mass) :
+PhysicsComponent::PhysicsComponent(Shape shape, btScalar mass, float impulse, float damping) :
 	body(nullptr),
 	shape(shape),
-	mass(mass)
+	mass(mass),
+	impulse(impulse),
+	damping(damping)
 {
 }
 
@@ -36,7 +38,19 @@ btScalar PhysicsComponent::getMass() const
 	return this->mass;
 }
 
+float PhysicsComponent::getImpulse() const
+{
+	return this->impulse;
+}
+
+float PhysicsComponent::getDamping() const
+{
+	return this->damping;
+}
+
 void PhysicsComponent::setBody(btRigidBody* body)
 {
 	this->body = body;
+	this->body->setActivationState(DISABLE_DEACTIVATION);
+	this->body->setDamping(this->damping, 0.f);
 }

@@ -9,6 +9,8 @@ InversePalindrome.com
 #include "MeshComponent.hpp"
 #include "LightComponent.hpp"
 #include "PhysicsComponent.hpp"
+#include "ObjectComponent.hpp"
+#include "Tags.hpp"
 #include "FilePaths.hpp"
 
 #include <RapidXML/rapidxml.hpp>
@@ -46,23 +48,24 @@ entityx::Entity EntityParser::parseEntity(const std::string& fileName)
 		if (node)
 		{
 			std::size_t shape = 0u;
-			float mass = 0.f;
+			float mass = 0.f, impulse = 0.f, damping = 0.f;
 
 			std::stringstream stream;
-			stream << node->first_attribute("shape")->value() << ' ' << node->first_attribute("mass")->value();
-			stream >> shape >> mass;
+			stream << node->first_attribute("shape")->value() << ' ' << node->first_attribute("mass")->value() <<
+				' ' << node->first_attribute("impulse")->value() << ' ' << node->first_attribute("damping")->value();
+			stream >> shape >> mass >> impulse >> damping;
 
-			entity.assign<PhysicsComponent>(static_cast<Shape>(shape), mass);
+			entity.assign<PhysicsComponent>(static_cast<Shape>(shape), mass, impulse, damping);
 		}
 
 		node = rootNode->first_node("Mesh");
-
+		
 		if (node)
 		{
 			const std::string& name = node->first_attribute("name")->value();
 
 			auto* entityMesh = this->sceneManager->createEntity(name + ".mesh");
-			auto* sceneNode = this->sceneManager->getRootSceneNode()->createChildSceneNode(name);
+			auto* sceneNode = this->sceneManager->getRootSceneNode()->createChildSceneNode();
 
 			entity.assign<MeshComponent>(entityMesh, sceneNode);
 		}
@@ -79,12 +82,32 @@ entityx::Entity EntityParser::parseEntity(const std::string& fileName)
 			stream << node->first_attribute("type")->value();
 			stream >> type;
 
-			auto* light = this->sceneManager->createLight(name);
+			auto* light = this->sceneManager->createLight();
 			light->setType(static_cast<Ogre::Light::LightTypes>(type));
 
-			auto* sceneNode = this->sceneManager->getRootSceneNode()->createChildSceneNode(name);
+			auto* sceneNode = this->sceneManager->getRootSceneNode()->createChildSceneNode();
 
 			entity.assign<LightComponent>(light, sceneNode);
+		}
+
+		node = rootNode->first_node("Object");
+
+		if (node)
+		{
+			std::size_t objectType = 0u;
+			std::stringstream stream;
+
+			stream << node->first_attribute("type")->value();
+			stream >> objectType;
+
+			entity.assign<ObjectComponent>(static_cast<ObjectType>(objectType));
+		}
+			
+		node = rootNode->first_node("Player");
+
+		if (node)
+		{
+			entity.assign<Player>();
 		}
 	}
 
@@ -110,25 +133,40 @@ void EntityParser::parseEntities(const std::string& fileName)
 		for (auto* node = rootNode->first_node("Entity"); node; node = node->next_sibling())
 		{
 			auto entity = this->parseEntity(node->first_attribute("filename")->value());
-
-			float x = 0.f, y = 0.f, z = 0.f;
+		
+			float xPos = 0.f, yPos = 0.f, zPos = 0.f, wRot = 0.f, xRot = 0.f, yRot = 0.f, zRot = 0.f;
 
 			std::stringstream stream;
-			stream << node->first_attribute("x")->value() << ' ' << node->first_attribute("y")->value() << ' ' << node->first_attribute("z")->value();
-			stream >> x >> y >> z;
+			stream << node->first_attribute("xPos")->value() << ' ' << node->first_attribute("yPos")->value() << ' ' << node->first_attribute("zPos")->value()
+				<< ' ' << node->first_attribute("wRot")->value() << ' ' << node->first_attribute("xRot")->value() << ' ' << node->first_attribute("yRot")->value()
+				<< ' ' << node->first_attribute("zRot")->value();
+			stream >> xPos >> yPos >> zPos >> wRot >> xRot >> yRot >> zRot;
+			
+			auto physics = entity.component<PhysicsComponent>();
+
+			if (physics)
+			{
+				btTransform transform;
+				transform.setIdentity();
+				transform.setOrigin({ xPos, yPos, zPos });
+				transform.setRotation({ xRot, yRot, wRot, zRot });
+				physics->getBody()->setCenterOfMassTransform(transform);
+			}
 
 			auto mesh = entity.component<MeshComponent>();
 
 			if (mesh)
 			{
-				mesh->getSceneNode()->setPosition({ x, y, z });
+				mesh->getSceneNode()->setPosition({ xPos, yPos, zPos });
+				mesh->getSceneNode()->rotate({ wRot, xRot, yRot, zRot });
 			}
 
 			auto light = entity.component<LightComponent>();
 
 			if (light)
 			{
-				light->getSceneNode()->setPosition({ x, y, z });
+				light->getSceneNode()->setPosition({ xPos, yPos, zPos });
+				light->getSceneNode()->rotate({ wRot, xRot, yRot, zRot });
 			}
 		}
 	}

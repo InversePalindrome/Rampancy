@@ -13,7 +13,7 @@ InversePalindrome.com
 void StartState::OnEnter()
 {
 	this->startText = this->getGui()->createWidget<MyGUI::TextBox>("TextBox", 250, 550, 800, 200, MyGUI::Align::Default, "Main");
-	this->startText->setCaption("Press the Spacebar to Continue");
+	this->startText->setCaption("Press any Key to Continue");
 
 	auto* entity = this->getSceneManager()->createEntity("ogre.mesh");
 	
@@ -50,7 +50,7 @@ hsm::Transition StartState::GetTransition()
 
 void StartState::Update()
 {
-	if (this->getInputManager().isKeyPressed(OIS::KC_SPACE))
+	if (this->getInputManager().isKeyPressed())
 	{
 		this->setStateTransition(StateTransition::Menu);
 	}

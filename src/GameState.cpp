@@ -8,6 +8,7 @@ InversePalindrome.com
 #include "GameState.hpp"
 #include "MenuState.hpp"
 #include "PhysicsSystem.hpp"
+#include "InputSystem.hpp"
 
 
 GameState::GameState() :
@@ -16,18 +17,20 @@ GameState::GameState() :
 	entityParser(entityManager)
 {
 	systemManager.add<PhysicsSystem>();
+	systemManager.add<InputSystem>();
 	
 	systemManager.configure();
 }
 
 void GameState::OnEnter()
 {
+	this->systemManager.system<InputSystem>()->setInputManager(&this->getInputManager());
+
 	this->entityParser.setSceneManager(this->getSceneManager());
+	this->entityParser.parseEntities("entities.xml");
 
 	this->pauseDisplay.initialise(this);
 	this->pauseDisplay.setVisible(false);
-	
-	this->entityParser.parseEntities("entities.xml");
 }
 
 void GameState::OnExit()
@@ -47,7 +50,7 @@ hsm::Transition GameState::GetTransition()
 
 void GameState::Update()
 {
-	if (this->getInputManager().isKeyPressed(OIS::KC_ESCAPE))
+	if (this->getInputManager().isActive(Action::Quit))
 	{	
 		this->pauseDisplay.setVisible(true);
 	}
