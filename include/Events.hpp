@@ -9,8 +9,15 @@ InversePalindrome.com
 
 #include "Direction.hpp"
 
+#include "OGRE/OgreSceneNode.h"
+
 #include <entityx/Entity.h>
 
+
+struct CreatePhysicalBody
+{
+	entityx::Entity entity;
+};
 
 struct ChangeDirection
 {

@@ -9,6 +9,7 @@ InversePalindrome.com
 
 #include "Events.hpp"
 #include "MeshComponent.hpp"
+#include "CameraComponent.hpp"
 #include "CollisionHandler.hpp"
 
 #include <bullet/BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
@@ -22,7 +23,7 @@ InversePalindrome.com
 #include <list>
 
 
-class PhysicsSystem : public entityx::System<PhysicsSystem>, public entityx::Receiver<entityx::ComponentAddedEvent<PhysicsSystem>>
+class PhysicsSystem : public entityx::System<PhysicsSystem>, public entityx::Receiver<PhysicsSystem>
 {
 public:
 	PhysicsSystem();
@@ -30,7 +31,7 @@ public:
 
 	virtual void configure(entityx::EventManager& eventManager) override;
 	virtual void update(entityx::EntityManager& entityManager, entityx::EventManager& eventManager, entityx::TimeDelta deltaTime) override;
-	virtual void receive(const entityx::ComponentAddedEvent<MeshComponent>& event);
+	virtual void receive(const CreatePhysicalBody& event);
 	virtual void receive(const ChangeDirection& event);
 	
 private:

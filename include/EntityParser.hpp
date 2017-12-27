@@ -23,8 +23,10 @@ public:
 	void parseEntities(const std::string& fileNames);
 
 	void setSceneManager(Ogre::SceneManager* sceneManager);
+	void setCamera(Ogre::Camera* camera);
 
 private:
 	entityx::EntityManager& entityManager;
 	Ogre::SceneManager* sceneManager;
+	Ogre::Camera* camera;
 };

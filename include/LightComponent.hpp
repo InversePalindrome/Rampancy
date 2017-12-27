@@ -8,18 +8,15 @@ InversePalindrome.com
 #pragma once
 
 #include <OGRE/OgreLight.h>
-#include <OGRE/OgreSceneNode.h>
 
 
 class LightComponent
 {
 public:
-	LightComponent(Ogre::Light* light, Ogre::SceneNode* sceneNode);
+	LightComponent(Ogre::Light* light);
 
 	Ogre::Light* getLight();
-	Ogre::SceneNode* getSceneNode();
 
 private:
 	Ogre::Light* light;
-	Ogre::SceneNode* sceneNode;
 };

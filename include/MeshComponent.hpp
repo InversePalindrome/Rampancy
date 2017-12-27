@@ -8,18 +8,17 @@ InversePalindrome.com
 #pragma once
 
 #include <OGRE/OgreEntity.h>
-#include <OGRE/OgreSceneNode.h>
 
 
 class MeshComponent
 {
 public:
-	MeshComponent(Ogre::Entity* entity, Ogre::SceneNode* sceneNode);
+	MeshComponent();
+	MeshComponent(Ogre::Entity* entity);
 
 	Ogre::Entity* getEntity();
-	Ogre::SceneNode* getSceneNode();
+	void setEntity(Ogre::Entity* entity);
 
 private:
 	Ogre::Entity* entity;
-	Ogre::SceneNode* sceneNode;
 };
