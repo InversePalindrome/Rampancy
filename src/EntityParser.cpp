@@ -10,6 +10,8 @@ InversePalindrome.com
 #include "LightComponent.hpp"
 #include "PhysicsComponent.hpp"
 #include "ObjectComponent.hpp"
+#include "CameraComponent.hpp"
+#include "SceneComponent.hpp"
 #include "Tags.hpp"
 #include "FilePaths.hpp"
 
@@ -21,7 +23,8 @@ InversePalindrome.com
 
 EntityParser::EntityParser(entityx::EntityManager& entityManager) :
 	entityManager(entityManager),
-	sceneManager(nullptr)
+	sceneManager(nullptr),
+	camera(nullptr)
 {
 }
 
@@ -65,18 +68,15 @@ entityx::Entity EntityParser::parseEntity(const std::string& fileName)
 			const std::string& name = node->first_attribute("name")->value();
 
 			auto* entityMesh = this->sceneManager->createEntity(name + ".mesh");
-			auto* sceneNode = this->sceneManager->getRootSceneNode()->createChildSceneNode();
 
-			entity.assign<MeshComponent>(entityMesh, sceneNode);
+			entity.assign<MeshComponent>(entityMesh);
 		}
 
 		node = rootNode->first_node("Light");
 
 		if (node)
 		{
-			const std::string& name = node->first_attribute("name")->value();
-
-			std::size_t type;
+			std::size_t type = 0u;
 			std::stringstream stream;
 
 			stream << node->first_attribute("type")->value();
@@ -85,9 +85,7 @@ entityx::Entity EntityParser::parseEntity(const std::string& fileName)
 			auto* light = this->sceneManager->createLight();
 			light->setType(static_cast<Ogre::Light::LightTypes>(type));
 
-			auto* sceneNode = this->sceneManager->getRootSceneNode()->createChildSceneNode();
-
-			entity.assign<LightComponent>(light, sceneNode);
+			entity.assign<LightComponent>(light);
 		}
 
 		node = rootNode->first_node("Object");
@@ -101,6 +99,13 @@ entityx::Entity EntityParser::parseEntity(const std::string& fileName)
 			stream >> objectType;
 
 			entity.assign<ObjectComponent>(static_cast<ObjectType>(objectType));
+		}
+
+		node = rootNode->first_node("Camera");
+
+		if(node)
+		{
+			entity.assign<CameraComponent>(this->camera);
 		}
 			
 		node = rootNode->first_node("Player");
@@ -149,24 +154,16 @@ void EntityParser::parseEntities(const std::string& fileName)
 				btTransform transform;
 				transform.setIdentity();
 				transform.setOrigin({ xPos, yPos, zPos });
-				transform.setRotation({ xRot, yRot, wRot, zRot });
+				transform.setRotation({ xRot, yRot, zRot, wRot });
 				physics->getBody()->setCenterOfMassTransform(transform);
 			}
 
-			auto mesh = entity.component<MeshComponent>();
+			auto scene = entity.component<SceneComponent>();
 
-			if (mesh)
+			if (scene)
 			{
-				mesh->getSceneNode()->setPosition({ xPos, yPos, zPos });
-				mesh->getSceneNode()->rotate({ wRot, xRot, yRot, zRot });
-			}
-
-			auto light = entity.component<LightComponent>();
-
-			if (light)
-			{
-				light->getSceneNode()->setPosition({ xPos, yPos, zPos });
-				light->getSceneNode()->rotate({ wRot, xRot, yRot, zRot });
+				scene->getSceneNode()->setPosition({ xPos, yPos, zPos });
+				scene->getSceneNode()->rotate({ wRot, xRot, yRot, zRot });
 			}
 		}
 	}
@@ -175,4 +172,9 @@ void EntityParser::parseEntities(const std::string& fileName)
 void EntityParser::setSceneManager(Ogre::SceneManager* sceneManager)
 {
 	this->sceneManager = sceneManager;
+}
+
+void EntityParser::setCamera(Ogre::Camera* camera)
+{
+	this->camera = camera;
 }

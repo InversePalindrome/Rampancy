@@ -120,8 +120,7 @@ void Application::loadResources()
 void Application::setupCamera()
 {
 	this->camera = this->sceneManager->createCamera("Main");
-	this->camera->setPosition({ 0, 0, 200 });
-	this->camera->lookAt({ 0, 0, 0 });
+	this->camera->setPosition({ 0, 0, 0 });
 	this->camera->setNearClipDistance(5);
 
 	auto* viewport = this->window->addViewport(camera);

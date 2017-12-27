@@ -8,19 +8,12 @@ InversePalindrome.com
 #include "LightComponent.hpp"
 
 
-LightComponent::LightComponent(Ogre::Light* light, Ogre::SceneNode* sceneNode) :
-	light(light),
-	sceneNode(sceneNode)
+LightComponent::LightComponent(Ogre::Light* light) :
+	light(light)
 {
-	sceneNode->attachObject(light);
 }
 
 Ogre::Light* LightComponent::getLight()
 {
 	return this->light;
-}
-
-Ogre::SceneNode* LightComponent::getSceneNode()
-{
-	return this->sceneNode;
 }

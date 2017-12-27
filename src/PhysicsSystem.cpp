@@ -6,6 +6,7 @@ InversePalindrome.com
 
 
 #include "PhysicsSystem.hpp"
+#include "SceneComponent.hpp"
 #include "PhysicsComponent.hpp"
 
 #include <BtOgreGP.h>
@@ -37,7 +38,7 @@ PhysicsSystem::~PhysicsSystem()
 
 void PhysicsSystem::configure(entityx::EventManager& eventManager)
 {
-	eventManager.subscribe<entityx::ComponentAddedEvent<MeshComponent>>(*this);
+	eventManager.subscribe<CreatePhysicalBody>(*this);
 	eventManager.subscribe<ChangeDirection>(*this);
 }
 
@@ -47,20 +48,20 @@ void PhysicsSystem::update(entityx::EntityManager& entityManager, entityx::Event
 	this->collisionHandler.update();
 }
 
-void PhysicsSystem::receive(const entityx::ComponentAddedEvent<MeshComponent>& event)
+void PhysicsSystem::receive(const CreatePhysicalBody& event)
 {
-	if (event.entity.has_component<PhysicsComponent>())
+	this->physicalEntities.push_back(event.entity);
+
+	auto physics = this->physicalEntities.back().component<PhysicsComponent>();
+	auto mesh = this->physicalEntities.back().component<MeshComponent>();
+	auto scene = this->physicalEntities.back().component<SceneComponent>();
+
+	auto* motionState = new BtOgre::RigidBodyState(scene->getSceneNode());
+	btCollisionShape* shape = nullptr;
+	
+	if (mesh)
 	{
-		this->physicalEntities.push_back(event.entity);
-
-		auto physics = this->physicalEntities.back().component<PhysicsComponent>();
-		auto mesh = event.component;
-
-		auto* motionState = new BtOgre::RigidBodyState(mesh->getSceneNode());
 		BtOgre::StaticMeshToShapeConverter converter(mesh->getEntity());
-
-		btVector3 localInertia;
-		btCollisionShape* shape = nullptr;
 
 		switch (physics->getShape())
 		{
@@ -83,24 +84,24 @@ void PhysicsSystem::receive(const entityx::ComponentAddedEvent<MeshComponent>& e
 			shape = converter.createCapsule();
 			break;
 		}
-
-		shape->calculateLocalInertia(physics->getMass(), localInertia);
-		
-		physics->setBody(new btRigidBody(physics->getMass(), motionState, shape, localInertia));
-		physics->getBody()->setUserPointer(&this->physicalEntities.back());
-
-		this->world->addRigidBody(physics->getBody());
 	}
+	else
+	{
+		shape = new btBoxShape({ 1.f, 1.f, 1.f });
+	}
+
+	btVector3 localInertia;
+	shape->calculateLocalInertia(physics->getMass(), localInertia);
+
+	physics->setBody(new btRigidBody(physics->getMass(), motionState, shape, localInertia));
+	physics->getBody()->setUserPointer(&this->physicalEntities.back());
+
+	this->world->addRigidBody(physics->getBody());
 }
 
 void PhysicsSystem::receive(const ChangeDirection& event)
 {
 	auto entity = event.entity;
-
-	if (!entity.valid())
-	{
-		return;
-	}
 
 	auto physics = entity.component<PhysicsComponent>();;
 
@@ -119,6 +120,12 @@ void PhysicsSystem::receive(const ChangeDirection& event)
 			break;
 		case Direction::Down:
 			physics->getBody()->applyCentralImpulse({0.f, -physics->getImpulse(), 0.f});
+			break;
+		case Direction::Forward:
+			physics->getBody()->applyCentralImpulse({0.f, 0.f, -physics->getImpulse()});
+			break;
+		case Direction::Backward:
+			physics->getBody()->applyCentralImpulse({0.f, 0.f, physics->getImpulse()});
 			break;
 		}
 	}

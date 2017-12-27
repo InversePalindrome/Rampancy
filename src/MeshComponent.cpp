@@ -8,11 +8,14 @@ InversePalindrome.com
 #include "MeshComponent.hpp"
 
 
-MeshComponent::MeshComponent(Ogre::Entity* entity, Ogre::SceneNode* sceneNode) :
-	entity(entity),
-	sceneNode(sceneNode)
+MeshComponent::MeshComponent() :
+	entity(nullptr)
 {
-	sceneNode->attachObject(entity);
+}
+
+MeshComponent::MeshComponent(Ogre::Entity* entity) :
+	entity(entity)
+{
 }
 
 Ogre::Entity* MeshComponent::getEntity()
@@ -20,7 +23,7 @@ Ogre::Entity* MeshComponent::getEntity()
 	return this->entity;
 }
 
-Ogre::SceneNode* MeshComponent::getSceneNode()
+void MeshComponent::setEntity(Ogre::Entity* entity)
 {
-	return this->sceneNode;
+	this->entity = entity;
 }

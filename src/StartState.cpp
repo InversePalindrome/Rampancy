@@ -16,9 +16,9 @@ void StartState::OnEnter()
 	this->startText->setCaption("Press any Key to Continue");
 
 	auto* entity = this->getSceneManager()->createEntity("ogre.mesh");
-	
+
 	auto* node = this->getSceneManager()->getRootSceneNode()->createChildSceneNode("Ogre");
-	node->setPosition(0, 0, 0);
+	node->setPosition(0, 0, -200);
 	node->attachObject(entity);
 	
 	auto* light = this->getSceneManager()->createLight();

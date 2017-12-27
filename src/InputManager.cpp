@@ -120,10 +120,8 @@ bool InputManager::isKeyPressed() const
 	return false;
 }
 
-
 void InputManager::loadKeyBindings()
 {
-
 	rapidxml::xml_document<> doc;
 	std::ifstream inFile(FP::settings + "actions.xml");
 	std::ostringstream buffer;

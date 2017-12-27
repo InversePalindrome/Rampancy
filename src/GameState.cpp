@@ -8,7 +8,13 @@ InversePalindrome.com
 #include "GameState.hpp"
 #include "MenuState.hpp"
 #include "PhysicsSystem.hpp"
-#include "InputSystem.hpp"
+#include "ControlSystem.hpp"
+#include "GraphicsSystem.hpp"
+#include "SceneComponent.hpp"
+#include "LightComponent.hpp"
+#include "CameraComponent.hpp"
+
+#include <entityx/deps/Dependencies.h>
 
 
 GameState::GameState() :
@@ -16,17 +22,24 @@ GameState::GameState() :
 	systemManager(entityManager, eventManager),
 	entityParser(entityManager)
 {
+	systemManager.add<GraphicsSystem>();
 	systemManager.add<PhysicsSystem>();
-	systemManager.add<InputSystem>();
+	systemManager.add<ControlSystem>();
+
+	systemManager.add<entityx::deps::Dependency<MeshComponent, SceneComponent>>();
+	systemManager.add<entityx::deps::Dependency<LightComponent, SceneComponent>>();
+	systemManager.add<entityx::deps::Dependency<CameraComponent, SceneComponent>>();
 	
 	systemManager.configure();
 }
 
 void GameState::OnEnter()
 {
-	this->systemManager.system<InputSystem>()->setInputManager(&this->getInputManager());
+	this->systemManager.system<ControlSystem>()->setInputManager(&this->getInputManager());
+	this->systemManager.system<GraphicsSystem>()->setSceneManager(this->getSceneManager());
 
 	this->entityParser.setSceneManager(this->getSceneManager());
+	this->entityParser.setCamera(this->getCamera());
 	this->entityParser.parseEntities("entities.xml");
 
 	this->pauseDisplay.initialise(this);
