@@ -7,11 +7,14 @@ InversePalindrome.com
 
 #pragma once
 
+#include "Component.hpp"
 #include "ObjectType.hpp"
 
 
-class ObjectComponent
+class ObjectComponent : public Component
 {
+	friend std::ostream& operator<<(std::ostream& os, const ObjectComponent& component);
+
 public:
 	ObjectComponent(ObjectType objectType);
 
@@ -22,3 +25,5 @@ public:
 private:
 	ObjectType objectType;
 };
+
+std::ostream& operator<<(std::ostream& os, const ObjectComponent& component);

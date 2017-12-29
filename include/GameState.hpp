@@ -9,6 +9,7 @@ InversePalindrome.com
 
 #include "State.hpp"
 #include "EntityParser.hpp"
+#include "EntitySerializer.hpp"
 #include "PauseDisplay.hpp"
 
 #include <entityx/entityx.h>
@@ -32,6 +33,7 @@ private:
 	entityx::SystemManager systemManager;
 
 	EntityParser entityParser;
+	EntitySerializer entitySerializer;
 
 	PauseDisplay pauseDisplay;
 };

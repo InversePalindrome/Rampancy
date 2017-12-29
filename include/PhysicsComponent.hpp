@@ -8,17 +8,23 @@ InversePalindrome.com
 #pragma once
 
 #include "Shape.hpp"
+#include "Component.hpp"
 
 #include <bullet/BulletDynamics/Dynamics/btRigidBody.h>
 
 
-class PhysicsComponent
+class PhysicsComponent : public Component
 {
+	friend std::istream& operator>>(std::istream& is, PhysicsComponent& component);
+	friend std::ostream& operator<<(std::ostream& os, const PhysicsComponent& component);
+
 public:
 	PhysicsComponent(Shape shape, btScalar mass, float impulse, float damping);
 	~PhysicsComponent();
 
 	btRigidBody* getBody();
+	btVector3 getPosition() const;
+	btQuaternion getRotation() const;
 	Shape getShape() const;
 	btScalar getMass() const;
 	float getImpulse() const;
@@ -33,3 +39,5 @@ private:
 	float impulse;
 	float damping;
 };
+
+std::ostream& operator<<(std::ostream& os, const PhysicsComponent& component);

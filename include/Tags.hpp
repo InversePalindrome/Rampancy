@@ -7,5 +7,13 @@ InversePalindrome.com
 
 #pragma once
 
+#include "Component.hpp"
 
-struct Player {};
+
+struct Player : public Component 
+{
+	Player() :
+		Component("Player")
+	{
+	}
+};

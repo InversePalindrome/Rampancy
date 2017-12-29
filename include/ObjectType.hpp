@@ -13,10 +13,12 @@ InversePalindrome.com
 
 enum class ObjectType : std::size_t
 { 
-	Player = (1 << 0), Enemy = (1 << 1)
+	Player = (1 << 0), Enemy = (1 << 1),
+	Alive = Player | Enemy
 };
 
 using T = std::underlying_type_t<ObjectType>;
+
 
 constexpr ObjectType operator|(const ObjectType objectA, const ObjectType objectB)
 {

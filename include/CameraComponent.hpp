@@ -8,10 +8,12 @@ InversePalindrome.com
 
 #pragma once
 
+#include "Component.hpp"
+
 #include <OGRE/OgreCamera.h>
 
 
-class CameraComponent
+class CameraComponent : public Component
 {
 public:
 	CameraComponent(Ogre::Camera* camera);

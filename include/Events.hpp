@@ -14,6 +14,11 @@ InversePalindrome.com
 #include <entityx/Entity.h>
 
 
+struct EntityParsed
+{
+	entityx::Entity entity;
+};
+
 struct CreatePhysicalBody
 {
 	entityx::Entity entity;

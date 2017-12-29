@@ -7,16 +7,21 @@ InversePalindrome.com
 
 #pragma once
 
+#include "Component.hpp"
+
 #include <OGRE/OgreLight.h>
 
 
-class LightComponent
+class LightComponent : public Component
 {
 public:
 	LightComponent(Ogre::Light* light);
 
 	Ogre::Light* getLight();
+	Ogre::Light* getLight() const;
 
 private:
 	Ogre::Light* light;
 };
+
+std::ostream& operator<<(std::ostream& os, const LightComponent& component);
