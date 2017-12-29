@@ -9,11 +9,12 @@ InversePalindrome.com
 
  
 SceneComponent::SceneComponent() :
-	sceneNode(nullptr)
+	SceneComponent(nullptr)
 {
 }
 
 SceneComponent::SceneComponent(Ogre::SceneNode* sceneNode) :
+	Component("Scene"),
 	sceneNode(sceneNode)
 {
 }
@@ -21,6 +22,16 @@ SceneComponent::SceneComponent(Ogre::SceneNode* sceneNode) :
 Ogre::SceneNode* SceneComponent::getSceneNode()
 {
 	return this->sceneNode;
+}
+
+Ogre::Vector3 SceneComponent::getPosition() const
+{
+	return this->sceneNode->getPosition();
+}
+
+Ogre::Quaternion SceneComponent::getRotation() const
+{
+	return this->sceneNode->getOrientation();
 }
 
 void SceneComponent::setSceneNode(Ogre::SceneNode* sceneNode)

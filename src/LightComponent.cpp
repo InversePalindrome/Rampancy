@@ -9,6 +9,7 @@ InversePalindrome.com
 
 
 LightComponent::LightComponent(Ogre::Light* light) :
+	Component("Light"),
 	light(light)
 {
 }
@@ -16,4 +17,16 @@ LightComponent::LightComponent(Ogre::Light* light) :
 Ogre::Light* LightComponent::getLight()
 {
 	return this->light;
+}
+
+Ogre::Light* LightComponent::getLight() const
+{
+	return this->light;
+}
+
+std::ostream& operator<<(std::ostream& os, const LightComponent& component)
+{
+	os << "type " << component.getLight()->getType();
+
+	return os;
 }

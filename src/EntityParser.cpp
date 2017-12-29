@@ -12,26 +12,80 @@ InversePalindrome.com
 #include "ObjectComponent.hpp"
 #include "CameraComponent.hpp"
 #include "SceneComponent.hpp"
+#include "Events.hpp"
 #include "Tags.hpp"
 #include "FilePaths.hpp"
-
-#include <RapidXML/rapidxml.hpp>
+#include "EnumUtility.hpp"
 
 #include <fstream>
 #include <sstream>
 
 
-EntityParser::EntityParser(entityx::EntityManager& entityManager) :
+EntityParser::EntityParser(entityx::EntityManager& entityManager, entityx::EventManager& eventManager) :
 	entityManager(entityManager),
+	eventManager(eventManager),
 	sceneManager(nullptr),
 	camera(nullptr)
 {
+	parsers["Physics"] = [](auto& entity, const auto* node)
+	{
+		Shape shape;
+		float mass = 0.f, impulse = 0.f, damping = 0.f;
+
+		std::stringstream stream;
+		stream << node->first_attribute("shape")->value() << ' ' << node->first_attribute("mass")->value() <<
+			' ' << node->first_attribute("impulse")->value() << ' ' << node->first_attribute("damping")->value();
+		stream >> shape >> mass >> impulse >> damping;
+
+		entity.assign<PhysicsComponent>(shape, mass, impulse, damping);
+	};
+	parsers["Scene"] = [](auto& entity, const auto* node)
+	{
+		entity.assign<SceneComponent>();
+	};
+	parsers["Mesh"] = [this](auto& entity, const auto* node)
+	{
+		const std::string& name = node->first_attribute("name")->value();
+
+		auto* entityMesh = sceneManager->createEntity(name);
+
+		entity.assign<MeshComponent>(entityMesh);
+	};
+	parsers["Light"] = [this](auto& entity, const auto* node)
+	{
+		Ogre::Light::LightTypes type;
+		std::stringstream stream;
+
+		stream << node->first_attribute("type")->value();
+		stream >> type;
+
+		auto* light = sceneManager->createLight();
+		light->setType(type);
+
+		entity.assign<LightComponent>(light);
+	};
+	parsers["Object"] = [](auto& entity, const auto* node)
+	{
+		ObjectType type;
+		std::stringstream stream;
+
+		stream << node->first_attribute("type")->value();
+		stream >> type;
+
+		entity.assign<ObjectComponent>(type);
+	};
+	parsers["Camera"] = [this](auto& entity, const auto* node)
+	{
+		entity.assign<CameraComponent>(camera);
+	};
+	parsers["Player"] = [](auto& entity, const auto* node)
+	{
+		entity.assign<Player>();
+	};
 }
 
-entityx::Entity EntityParser::parseEntity(const std::string& fileName)
+void EntityParser::parseEntity(entityx::Entity& entity, const std::string& fileName)
 {
-	auto entity = this->entityManager.create();
-
 	rapidxml::xml_document<> doc;
 	std::ifstream inFile(FP::entities + fileName);
 	std::ostringstream buffer;
@@ -46,83 +100,36 @@ entityx::Entity EntityParser::parseEntity(const std::string& fileName)
 	
 	if (rootNode)
 	{
-		auto* node = rootNode->first_node("Physics");
-
-		if (node)
-		{
-			std::size_t shape = 0u;
-			float mass = 0.f, impulse = 0.f, damping = 0.f;
-
-			std::stringstream stream;
-			stream << node->first_attribute("shape")->value() << ' ' << node->first_attribute("mass")->value() <<
-				' ' << node->first_attribute("impulse")->value() << ' ' << node->first_attribute("damping")->value();
-			stream >> shape >> mass >> impulse >> damping;
-
-			entity.assign<PhysicsComponent>(static_cast<Shape>(shape), mass, impulse, damping);
-		}
-
-		node = rootNode->first_node("Mesh");
-		
-		if (node)
-		{
-			const std::string& name = node->first_attribute("name")->value();
-
-			auto* entityMesh = this->sceneManager->createEntity(name + ".mesh");
-
-			entity.assign<MeshComponent>(entityMesh);
-		}
-
-		node = rootNode->first_node("Light");
-
-		if (node)
-		{
-			std::size_t type = 0u;
-			std::stringstream stream;
-
-			stream << node->first_attribute("type")->value();
-			stream >> type;
-
-			auto* light = this->sceneManager->createLight();
-			light->setType(static_cast<Ogre::Light::LightTypes>(type));
-
-			entity.assign<LightComponent>(light);
-		}
-
-		node = rootNode->first_node("Object");
-
-		if (node)
-		{
-			std::size_t objectType = 0u;
-			std::stringstream stream;
-
-			stream << node->first_attribute("type")->value();
-			stream >> objectType;
-
-			entity.assign<ObjectComponent>(static_cast<ObjectType>(objectType));
-		}
-
-		node = rootNode->first_node("Camera");
-
-		if(node)
-		{
-			entity.assign<CameraComponent>(this->camera);
-		}
-			
-		node = rootNode->first_node("Player");
-
-		if (node)
-		{
-			entity.assign<Player>();
-		}
+		this->parseEntity(entity, rootNode);
 	}
-
-	return entity;
 }
 
-void EntityParser::parseEntities(const std::string& fileName)
+void EntityParser::parseEntity(entityx::Entity& entity, const rapidxml::xml_node<char>* entityNode)
 {
+	for (const auto* node = entityNode->first_node(); node; node = node->next_sibling())
+	{
+		if (this->parsers.count(node->name()))
+		{
+			this->parsers[node->name()](entity, node);
+		}
+	}
+}
+
+void EntityParser::parseEntities(ParsingMode mode, const std::string& fileName)
+{
+	std::string entitiesPath;
+
+	if (mode == ParsingMode::Individual)
+	{
+		entitiesPath = FP::entities + fileName;
+	}
+	else
+	{
+		entitiesPath = FP::savedGames + fileName;
+	}
+
 	rapidxml::xml_document<> doc;
-	std::ifstream inFile(FP::entities + fileName);
+	std::ifstream inFile(entitiesPath);
 	std::ostringstream buffer;
 
 	buffer << inFile.rdbuf();
@@ -135,10 +142,21 @@ void EntityParser::parseEntities(const std::string& fileName)
 
 	if (rootNode)
 	{
-		for (auto* node = rootNode->first_node("Entity"); node; node = node->next_sibling())
+		for (const auto* node = rootNode->first_node("Entity"); node; node = node->next_sibling())
 		{
-			auto entity = this->parseEntity(node->first_attribute("filename")->value());
+			auto entity = this->entityManager.create();
+
+			if (mode == ParsingMode::Group)
+			{
+				this->parseEntity(entity, node);
+			}
+			else if (mode == ParsingMode::Individual)
+			{
+				this->parseEntity(entity, node->first_attribute("filename")->value());
+			}
 		
+			this->eventManager.emit(EntityParsed{ entity });
+
 			float xPos = 0.f, yPos = 0.f, zPos = 0.f, wRot = 0.f, xRot = 0.f, yRot = 0.f, zRot = 0.f;
 
 			std::stringstream stream;
@@ -146,12 +164,13 @@ void EntityParser::parseEntities(const std::string& fileName)
 				<< ' ' << node->first_attribute("wRot")->value() << ' ' << node->first_attribute("xRot")->value() << ' ' << node->first_attribute("yRot")->value()
 				<< ' ' << node->first_attribute("zRot")->value();
 			stream >> xPos >> yPos >> zPos >> wRot >> xRot >> yRot >> zRot;
-			
+		
 			auto physics = entity.component<PhysicsComponent>();
 
 			if (physics)
 			{
 				btTransform transform;
+				
 				transform.setIdentity();
 				transform.setOrigin({ xPos, yPos, zPos });
 				transform.setRotation({ xRot, yRot, zRot, wRot });

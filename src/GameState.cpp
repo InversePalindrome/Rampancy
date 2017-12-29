@@ -13,6 +13,7 @@ InversePalindrome.com
 #include "SceneComponent.hpp"
 #include "LightComponent.hpp"
 #include "CameraComponent.hpp"
+#include "FilePaths.hpp"
 
 #include <entityx/deps/Dependencies.h>
 
@@ -20,7 +21,8 @@ InversePalindrome.com
 GameState::GameState() :
 	entityManager(eventManager),
 	systemManager(entityManager, eventManager),
-	entityParser(entityManager)
+	entityParser(entityManager, eventManager),
+	entitySerializer(entityManager)
 {
 	systemManager.add<GraphicsSystem>();
 	systemManager.add<PhysicsSystem>();
@@ -40,7 +42,7 @@ void GameState::OnEnter()
 
 	this->entityParser.setSceneManager(this->getSceneManager());
 	this->entityParser.setCamera(this->getCamera());
-	this->entityParser.parseEntities("entities.xml");
+	this->entityParser.parseEntities(ParsingMode::Individual, "Entities.xml");
 
 	this->pauseDisplay.initialise(this);
 	this->pauseDisplay.setVisible(false);
@@ -48,6 +50,7 @@ void GameState::OnEnter()
 
 void GameState::OnExit()
 {
+	this->entitySerializer.serialize("Entities.xml");
 	this->getSceneManager()->clearScene();
 }
 

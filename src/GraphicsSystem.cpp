@@ -14,43 +14,47 @@ InversePalindrome.com
 
 void GraphicsSystem::configure(entityx::EventManager& eventManager)
 {
-	eventManager.subscribe<entityx::ComponentAddedEvent<SceneComponent>>(*this);
+	eventManager.subscribe<EntityParsed>(*this);
 
 	this->eventManager = &eventManager;
 }
 
 void GraphicsSystem::update(entityx::EntityManager& entityManager, entityx::EventManager& eventManager, entityx::TimeDelta deltaTime)
 {
-
+	
 }
 
-void GraphicsSystem::receive(const entityx::ComponentAddedEvent<SceneComponent>& event)
+void GraphicsSystem::receive(const EntityParsed& event)
 {
 	auto entity = event.entity;
+	
+	auto scene = entity.component<SceneComponent>();
 
-	auto scene = event.component;
-	auto mesh = entity.component<MeshComponent>();
-	auto light = entity.component<LightComponent>();
-	auto camera = entity.component<CameraComponent>();
-
-	if (mesh)
+	if (scene)
 	{
-		scene->setSceneNode(this->sceneManager->getRootSceneNode()->createChildSceneNode());
-		scene->getSceneNode()->attachObject(mesh->getEntity());
+		auto mesh = entity.component<MeshComponent>();
+		auto light = entity.component<LightComponent>();
+		auto camera = entity.component<CameraComponent>();
+	
+		if (mesh)
+		{
+			scene->setSceneNode(this->sceneManager->getRootSceneNode()->createChildSceneNode());
+			scene->getSceneNode()->attachObject(mesh->getEntity());
 
-		this->eventManager->emit(CreatePhysicalBody{ entity });
-	}
-	else if (camera)
-	{
-		scene->setSceneNode(this->sceneManager->getRootSceneNode()->createChildSceneNode());
-		scene->getSceneNode()->attachObject(camera->getCamera());
+			this->eventManager->emit(CreatePhysicalBody{ entity });
+		}
+		else if (camera)
+		{
+			scene->setSceneNode(this->sceneManager->getRootSceneNode()->createChildSceneNode());
+			scene->getSceneNode()->attachObject(camera->getCamera());
 
-		this->eventManager->emit(CreatePhysicalBody{ entity });
-	}
-	else if (light)
-	{
-		scene->setSceneNode(this->sceneManager->getRootSceneNode()->createChildSceneNode());
-		scene->getSceneNode()->attachObject(light->getLight());
+			this->eventManager->emit(CreatePhysicalBody{ entity });
+		}
+		else if (light)
+		{
+			scene->setSceneNode(this->sceneManager->getRootSceneNode()->createChildSceneNode());
+			scene->getSceneNode()->attachObject(light->getLight());
+		}
 	}
 }
 

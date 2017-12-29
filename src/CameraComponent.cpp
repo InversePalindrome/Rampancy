@@ -9,6 +9,7 @@ InversePalindrome.com
 
 
 CameraComponent::CameraComponent(Ogre::Camera* camera) :
+	Component("Camera"),
 	camera(camera)
 {
 }

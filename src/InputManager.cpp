@@ -7,6 +7,7 @@ InversePalindrome.com
 
 #include "InputManager.hpp"
 #include "FilePaths.hpp"
+#include "EnumUtility.hpp"
 
 #include <MYGUI/MyGUI_InputManager.h>
 
@@ -138,13 +139,14 @@ void InputManager::loadKeyBindings()
 	{
 		for (auto* node = rootNode->first_node("Key"); node; node = node->next_sibling())
 		{
-			std::size_t action= 0u, keyCode = 0u;
+			Action action;
+			OIS::KeyCode keyCode;
 
 			std::stringstream stream;
 			stream << node->first_attribute("action")->value() << ' ' << node->first_attribute("code")->value();
 			stream >> action >> keyCode;
 
-			this->keyBindings[static_cast<Action>(action)] = static_cast<OIS::KeyCode>(keyCode);
+			this->keyBindings[action] = keyCode;
 		}
 	}
 }
