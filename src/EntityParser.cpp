@@ -96,7 +96,7 @@ void EntityParser::parseEntity(entityx::Entity& entity, const std::string& fileN
 	std::string content(buffer.str());
 	doc.parse<0>(&content[0]);
 
-	auto* rootNode = doc.first_node("Entity");
+	const auto* rootNode = doc.first_node("Entity");
 	
 	if (rootNode)
 	{
@@ -138,7 +138,7 @@ void EntityParser::parseEntities(ParsingMode mode, const std::string& fileName)
 	std::string content(buffer.str());
 	doc.parse<0>(&content[0]);
 
-	auto* rootNode = doc.first_node("Entities");
+	const auto* rootNode = doc.first_node("Entities");
 
 	if (rootNode)
 	{

@@ -15,8 +15,8 @@ CallbackTimer::CallbackTimer() :
 
 CallbackTimer::~CallbackTimer()
 {
-	if (this->thread.joinable())
+	if (thread.joinable())
 	{
-		this->thread.join();
+		thread.join();
 	}
 }

@@ -38,6 +38,11 @@ StateTransition State::getStateTransition()
 	return reinterpret_cast<Application*>(GetStateMachine().GetOwner())->stateTransition;
 }
 
+Games& State::getGames()
+{
+	return reinterpret_cast<Application*>(GetStateMachine().GetOwner())->games;
+}
+
 void State::setShutdown(bool shutdown)
 {
 	reinterpret_cast<Application*>(GetStateMachine().GetOwner())->shutdown = shutdown;

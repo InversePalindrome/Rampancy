@@ -17,6 +17,8 @@ InversePalindrome.com
 
 #include <entityx/deps/Dependencies.h>
 
+#include <boost/filesystem/convenience.hpp>
+
 
 GameState::GameState() :
 	entityManager(eventManager),
@@ -42,7 +44,15 @@ void GameState::OnEnter()
 
 	this->entityParser.setSceneManager(this->getSceneManager());
 	this->entityParser.setCamera(this->getCamera());
-	this->entityParser.parseEntities(ParsingMode::Individual, "Entities.xml");
+
+	if (!boost::filesystem::exists(FP::savedGames + '/' + this->getGames().getCurrentGame().getName() + "/Entities.xml"))
+	{
+		this->entityParser.parseEntities(ParsingMode::Individual, "Entities.xml");
+	}
+	else
+	{
+		this->entityParser.parseEntities(ParsingMode::Group, '/'+ this->getGames().getCurrentGame().getName() + "/Entities.xml");
+	}
 
 	this->pauseDisplay.initialise(this);
 	this->pauseDisplay.setVisible(false);
@@ -50,7 +60,7 @@ void GameState::OnEnter()
 
 void GameState::OnExit()
 {
-	this->entitySerializer.serialize("Entities.xml");
+	this->entitySerializer.serialize('/' + this->getGames().getCurrentGame().getName() + "/Entities.xml");
 	this->getSceneManager()->clearScene();
 }
 

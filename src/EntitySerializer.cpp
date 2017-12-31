@@ -24,6 +24,7 @@ void EntitySerializer::serialize(const std::string& fileName)
 	this->saveEntities();
 
 	rapidxml::xml_document<> doc;
+
 	auto* decl = doc.allocate_node(rapidxml::node_declaration);
 	decl->append_attribute(doc.allocate_attribute("version", "1.0"));
 	decl->append_attribute(doc.allocate_attribute("encoding", "UTF-8"));

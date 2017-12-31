@@ -6,6 +6,7 @@ InversePalindrome.com
 
 
 #include "SettingsState.hpp"
+#include "MenuState.hpp"
 
 
 void SettingsState::OnEnter()
@@ -20,6 +21,16 @@ void SettingsState::OnEnter()
 void SettingsState::OnExit()
 {
 	this->getGui()->destroyWidget(this->backButton);
+}
+
+hsm::Transition SettingsState::GetTransition()
+{
+	if (this->getStateTransition() == StateTransition::Menu)
+	{
+		return hsm::SiblingTransition<MenuState>();
+	}
+
+	return hsm::NoTransition();
 }
 
 void SettingsState::transitionBack(MyGUI::WidgetPtr backButton)

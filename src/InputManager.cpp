@@ -14,7 +14,7 @@ InversePalindrome.com
 #include <RapidXML/rapidxml.hpp>
 
 
-void InputManager::initialise(Ogre::RenderWindow* window)
+void InputManager::setup(Ogre::RenderWindow* window)
 {
 	std::size_t windowHandle = 0u;
 

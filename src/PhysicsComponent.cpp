@@ -21,8 +21,8 @@ PhysicsComponent::PhysicsComponent(Shape shape, btScalar mass, float impulse, fl
 
 PhysicsComponent::~PhysicsComponent()
 {
-	delete this->body->getMotionState();
-	delete this->body;
+	delete body->getMotionState();
+	delete body;
 }
 
 btRigidBody* PhysicsComponent::getBody()

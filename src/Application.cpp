@@ -20,39 +20,35 @@ Application::Application() :
 	gui(new MyGUI::Gui()),
 	guiPlatform(new MyGUI::OgrePlatform()),
     stateTransition(StateTransition::None),
+	games("SavedGames.xml"),
 	shutdown(false)
 {
-	if (root->showConfigDialog())
+	isConfigured = configure();
+
+	if (isConfigured)
 	{
-		window = root->initialise(true, "Rampancy");
+		initialise();
 	}
-
-	loadResources();
-
-	setupCamera();
-	
-	root->addFrameListener(this);
-
-	inputManager.initialise(window);
-	
-	Ogre::WindowEventUtilities::addWindowEventListener(window, this);
-
-	guiPlatform->initialise(window, sceneManager);
-	gui->initialise();
-
-	stateMachine.Initialize<SplashState>(this);
+	else
+	{
+		shutdown = true;
+	}
 }
 
 Application::~Application()
 {
-	this->gui->shutdown();
-	this->guiPlatform->shutdown();
-	
-	Ogre::WindowEventUtilities::removeWindowEventListener(this->window, this);
+	Ogre::WindowEventUtilities::removeWindowEventListener(window, this);
 
-	delete this->gui;
-	delete this->guiPlatform;
-	delete this->root;
+	if (isConfigured)
+	{
+		gui->shutdown();
+		guiPlatform->shutdown();
+	}
+
+	delete gui;
+	delete guiPlatform;
+	
+	delete root;
 }
 
 void Application::run()
@@ -81,6 +77,35 @@ void Application::update()
 void Application::render()
 {
 	this->root->renderOneFrame();
+}
+
+bool Application::configure()
+{
+	if (this->root->showConfigDialog())
+	{
+		this->window = this->root->initialise(true, "Rampancy");
+
+		return true;
+	}
+
+	return false;
+}
+
+void Application::initialise()
+{
+	this->root->addFrameListener(this);
+	Ogre::WindowEventUtilities::addWindowEventListener(this->window, this);
+
+	this->inputManager.setup(window);
+
+	this->addCamera();
+
+	this->loadResources();
+
+	this->guiPlatform->initialise(window, sceneManager);
+	this->gui->initialise();
+
+	this->stateMachine.Initialize<SplashState>(this);
 }
 
 void Application::loadResources()
@@ -117,7 +142,7 @@ void Application::loadResources()
 	Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 }
 
-void Application::setupCamera()
+void Application::addCamera()
 {
 	this->camera = this->sceneManager->createCamera("Main");
 	this->camera->setPosition({ 0, 0, 0 });
