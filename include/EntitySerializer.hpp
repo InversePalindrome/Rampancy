@@ -17,7 +17,7 @@ InversePalindrome.com
 class EntitySerializer
 {
 public:
-	EntitySerializer(entityx::EntityManager& entityManager);
+	explicit EntitySerializer(entityx::EntityManager& entityManager);
 
 	void serialize(const std::string& fileName);
 

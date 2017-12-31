@@ -19,7 +19,7 @@ InversePalindrome.com
 class CollisionHandler
 {
 public:
-	CollisionHandler(btDispatcher* dispatcher);
+	explicit CollisionHandler(btDispatcher* dispatcher);
 
 	void update();
 
@@ -27,6 +27,7 @@ private:
 	btDispatcher* dispatcher;
 
 	void handleCollision(entityx::Entity entityA, entityx::Entity entityB);
+
     boost::optional<std::pair<entityx::Entity, entityx::Entity>> collided(entityx::Entity entityA, entityx::Entity entityB,
 		ObjectType objectTypeA, ObjectType objectTypeB);
 };

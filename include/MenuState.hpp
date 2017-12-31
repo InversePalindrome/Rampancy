@@ -9,7 +9,8 @@ InversePalindrome.com
 
 #include "State.hpp"
 
-#include "MYGUI/MyGUI_Button.h"
+#include <MYGUI/MyGUI_Button.h>
+#include <MyGUI/MyGUI_Window.h>
 
 
 class MenuState : public State
@@ -21,11 +22,22 @@ public:
 	virtual hsm::Transition GetTransition() override;
 
 private:
-	MyGUI::ButtonPtr playButton;
+	MyGUI::ButtonPtr newGameButton;
+	MyGUI::ButtonPtr loadGameButton;
 	MyGUI::ButtonPtr settingsButton;
 	MyGUI::ButtonPtr quitButton;
 
+	MyGUI::WindowPtr newGameWindow;
+	MyGUI::WindowPtr loadGameWindow;
+
+	void openNewGameTab(MyGUI::WidgetPtr newGameButton);
+	void openLoadedGamesTab(MyGUI::WidgetPtr loadGameButton);
+	void addGame(MyGUI::WidgetPtr addGameButton);
+	void deleteGame(MyGUI::WidgetPtr deleteGameButton);
+	void closeWindow(MyGUI::WidgetPtr window, const std::string& button);
+
 	void transitionToGame(MyGUI::WidgetPtr playButton);
 	void transitionToSettings(MyGUI::WidgetPtr settingsButton);
+
 	void quitApp(MyGUI::WidgetPtr quitButton);
 };

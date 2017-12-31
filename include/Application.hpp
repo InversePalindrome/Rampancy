@@ -7,6 +7,7 @@ InversePalindrome.com
 
 #pragma once
 
+#include "Games.hpp"
 #include "InputManager.hpp"
 #include "StateTransitions.hpp"
 
@@ -53,12 +54,17 @@ private:
 
 	StateTransition stateTransition;
 
+	Games games;
+
 	bool shutdown;
+	bool isConfigured;
 
 	void handleEvent();
 	void update();
 	void render();
 
+	bool configure();
+	void initialise();
 	void loadResources();
-	void setupCamera();
+	void addCamera();
 };

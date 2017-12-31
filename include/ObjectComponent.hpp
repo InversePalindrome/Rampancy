@@ -16,7 +16,7 @@ class ObjectComponent : public Component
 	friend std::ostream& operator<<(std::ostream& os, const ObjectComponent& component);
 
 public:
-	ObjectComponent(ObjectType objectType);
+	explicit ObjectComponent(ObjectType objectType);
 
 	ObjectType getObjectType() const;
 

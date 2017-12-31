@@ -16,7 +16,7 @@ class SceneComponent : public Component
 {
 public:
 	SceneComponent();
-	SceneComponent(Ogre::SceneNode* sceneNode);
+	explicit SceneComponent(Ogre::SceneNode* sceneNode);
 
 	Ogre::SceneNode* getSceneNode();
 	Ogre::Vector3 getPosition() const;

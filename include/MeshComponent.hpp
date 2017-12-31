@@ -18,7 +18,7 @@ class MeshComponent : public Component
 
 public:
 	MeshComponent();
-	MeshComponent(Ogre::Entity* entity);
+	explicit MeshComponent(Ogre::Entity* entity);
 
 	Ogre::Entity* getEntity();
 	Ogre::Entity* getEntity() const;

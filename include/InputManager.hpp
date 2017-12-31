@@ -25,7 +25,7 @@ public:
 	InputManager(const InputManager&) = delete;
 	InputManager& operator=(const InputManager&) = delete;
 
-	void initialise(Ogre::RenderWindow* window);
+	void setup(Ogre::RenderWindow* window);
 	~InputManager();
 
 	void capture();

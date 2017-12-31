@@ -21,6 +21,7 @@ public:
 	Ogre::SceneManager* getSceneManager();
 	InputManager& getInputManager();
 	StateTransition getStateTransition();
+	Games& getGames();
 
 	void setShutdown(bool shutdown);
 	void setStateTransition(StateTransition stateTransition);

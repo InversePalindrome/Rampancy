@@ -1,6 +1,6 @@
 /*
 Copyright (c) 2017 InversePalindrome
-Rampancy - Component.hpp
+Rampancy - Game.hpp
 InversePalindrome.com
 */
 
@@ -10,16 +10,14 @@ InversePalindrome.com
 #include <string>
 
 
-class Component
+class Game
 {
 public:
-	explicit Component(const std::string& name);
+	Game() = default;
+	explicit Game(const std::string& name);
 
 	std::string getName() const;
 
 private:
 	std::string name;
 };
-
-
-std::ostream& operator<<(std::ostream& os, const Component& component);

@@ -15,7 +15,7 @@ InversePalindrome.com
 class LightComponent : public Component
 {
 public:
-	LightComponent(Ogre::Light* light);
+	explicit LightComponent(Ogre::Light* light);
 
 	Ogre::Light* getLight();
 	Ogre::Light* getLight() const;
