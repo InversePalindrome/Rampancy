@@ -81,5 +81,8 @@ void GameState::Update()
 		this->pauseDisplay.setVisible(true);
 	}
 
-    this->systemManager.update_all(0);
+	if (!this->pauseDisplay.isVisible())
+	{
+		this->systemManager.update_all(0);
+	}
 }

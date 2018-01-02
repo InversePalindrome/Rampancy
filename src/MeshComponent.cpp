@@ -19,6 +19,13 @@ MeshComponent::MeshComponent(Ogre::Entity* entity) :
 {
 }
 
+MeshComponent::MeshComponent(Ogre::Entity* entity, Ogre::SceneManager::PrefabType prefabType) :
+	Component("Mesh2"),
+	entity(entity),
+	prefabType(prefabType)
+{
+}
+
 Ogre::Entity* MeshComponent::getEntity()
 {
 	return this->entity;
@@ -29,6 +36,11 @@ Ogre::Entity* MeshComponent::getEntity() const
 	return this->entity;
 }
 
+Ogre::SceneManager::PrefabType MeshComponent::getPrefabType() const
+{
+	return this->prefabType;
+}
+
 void MeshComponent::setEntity(Ogre::Entity* entity)
 {
 	this->entity = entity;
@@ -36,7 +48,14 @@ void MeshComponent::setEntity(Ogre::Entity* entity)
 
 std::ostream& operator<<(std::ostream& os, const MeshComponent& component)
 {
-	os << "name " << component.entity->getMesh()->getName();
+	if (component.getName() == "Mesh")
+	{
+		os << "name " << component.entity->getMesh()->getName();
+	}
+	else if (component.getName() == "Mesh2")
+	{
+		os << "prefabType " << component.getPrefabType();
+	}
 
 	return os;
 }

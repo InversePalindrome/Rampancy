@@ -38,6 +38,11 @@ void PauseDisplay::setVisible(bool visibilityStatus)
 	this->quitButton->setVisible(visibilityStatus);
 }
 
+bool PauseDisplay::isVisible() const
+{
+	return this->resumeButton->getVisible();
+}
+
 void PauseDisplay::transitionToGame(MyGUI::WidgetPtr resumeButton)
 {
 	this->setVisible(false);

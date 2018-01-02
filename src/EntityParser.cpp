@@ -27,36 +27,47 @@ EntityParser::EntityParser(entityx::EntityManager& entityManager, entityx::Event
 	sceneManager(nullptr),
 	camera(nullptr)
 {
-	parsers["Physics"] = [](auto& entity, const auto* node)
+	parsers["Physics"] = [](auto& entity, const auto& attribute)
 	{
 		Shape shape;
-		float mass = 0.f, impulse = 0.f, damping = 0.f;
+		float mass = 0.f, movementImpulse = 0.f, rotationImpulse = 0.f, movementDamping = 0.f, rotationDamping = 0.f;
 
 		std::stringstream stream;
-		stream << node->first_attribute("shape")->value() << ' ' << node->first_attribute("mass")->value() <<
-			' ' << node->first_attribute("impulse")->value() << ' ' << node->first_attribute("damping")->value();
-		stream >> shape >> mass >> impulse >> damping;
+		stream << attribute.value<std::size_t>("shape") << ' ' << attribute.value<float>("mass") <<
+			' ' << attribute.value<float>("movementImpulse") << ' ' << attribute.value<float>("rotationImpulse") 
+			<< ' ' << attribute.value<float>("movementDamping") << ' ' << attribute.value<float>("rotationDamping");
+		stream >> shape >> mass >> movementImpulse >> rotationImpulse >> movementDamping >> rotationDamping;
 
-		entity.assign<PhysicsComponent>(shape, mass, impulse, damping);
+		entity.assign<PhysicsComponent>(shape, mass, movementImpulse, rotationImpulse, movementDamping, rotationDamping);
 	};
-	parsers["Scene"] = [](auto& entity, const auto* node)
+	parsers["Scene"] = [](auto& entity, const auto& attribute)
 	{
 		entity.assign<SceneComponent>();
 	};
-	parsers["Mesh"] = [this](auto& entity, const auto* node)
+	parsers["Mesh"] = [this](auto& entity, const auto& attribute)
 	{
-		const std::string& name = node->first_attribute("name")->value();
-
-		auto* entityMesh = sceneManager->createEntity(name);
+		auto* entityMesh = sceneManager->createEntity(attribute.value<std::string>("name"));
 
 		entity.assign<MeshComponent>(entityMesh);
 	};
-	parsers["Light"] = [this](auto& entity, const auto* node)
+	parsers["Mesh2"] = [this](auto& entity, const auto& attribute)
+	{
+		Ogre::SceneManager::PrefabType prefabType;
+		std::stringstream stream;
+
+		stream << attribute.value<std::size_t>("prefabType");
+		stream >> prefabType;
+		
+		auto* entityMesh = sceneManager->createEntity(prefabType);
+
+		entity.assign<MeshComponent>(entityMesh, prefabType);
+	};
+	parsers["Light"] = [this](auto& entity, const auto& attribute)
 	{
 		Ogre::Light::LightTypes type;
 		std::stringstream stream;
 
-		stream << node->first_attribute("type")->value();
+		stream << attribute.value<std::size_t>("type");
 		stream >> type;
 
 		auto* light = sceneManager->createLight();
@@ -64,21 +75,21 @@ EntityParser::EntityParser(entityx::EntityManager& entityManager, entityx::Event
 
 		entity.assign<LightComponent>(light);
 	};
-	parsers["Object"] = [](auto& entity, const auto* node)
+	parsers["Object"] = [](auto& entity, const auto& attribute)
 	{
 		ObjectType type;
 		std::stringstream stream;
 
-		stream << node->first_attribute("type")->value();
+		stream << attribute.value<std::size_t>("type");
 		stream >> type;
 
 		entity.assign<ObjectComponent>(type);
 	};
-	parsers["Camera"] = [this](auto& entity, const auto* node)
+	parsers["Camera"] = [this](auto& entity, const auto& attribute)
 	{
 		entity.assign<CameraComponent>(camera);
 	};
-	parsers["Player"] = [](auto& entity, const auto* node)
+	parsers["Player"] = [](auto& entity, const auto& attribute)
 	{
 		entity.assign<Player>();
 	};
@@ -110,7 +121,7 @@ void EntityParser::parseEntity(entityx::Entity& entity, const rapidxml::xml_node
 	{
 		if (this->parsers.count(node->name()))
 		{
-			this->parsers[node->name()](entity, node);
+			this->parsers[node->name()](entity, XMLAttribute(node));
 		}
 	}
 }

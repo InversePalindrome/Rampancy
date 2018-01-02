@@ -40,6 +40,7 @@ void PhysicsSystem::configure(entityx::EventManager& eventManager)
 {
 	eventManager.subscribe<CreatePhysicalBody>(*this);
 	eventManager.subscribe<ChangeDirection>(*this);
+	eventManager.subscribe<ChangeRotation>(*this);
 }
 
 void PhysicsSystem::update(entityx::EntityManager& entityManager, entityx::EventManager& eventManager, entityx::TimeDelta deltaTime)
@@ -85,10 +86,6 @@ void PhysicsSystem::receive(const CreatePhysicalBody& event)
 			break;
 		}
 	}
-	else
-	{
-		shape = new btBoxShape({ 1.f, 1.f, 1.f });
-	}
 
 	btVector3 localInertia;
 	shape->calculateLocalInertia(physics->getMass(), localInertia);
@@ -110,23 +107,39 @@ void PhysicsSystem::receive(const ChangeDirection& event)
 		switch (event.direction)
 		{
 		case Direction::Left:
-			physics->getBody()->applyCentralImpulse({-physics->getImpulse(), 0.f, 0.f});
+			physics->getBody()->applyCentralImpulse({-physics->getMovementImpulse(), 0.f, 0.f});
 			break;
 		case Direction::Right:
-			physics->getBody()->applyCentralImpulse({physics->getImpulse(), 0.f, 0.f});
+			physics->getBody()->applyCentralImpulse({physics->getMovementImpulse(), 0.f, 0.f});
 			break;
 		case Direction::Up:
-			physics->getBody()->applyCentralImpulse({0.f, physics->getImpulse(), 0.f});
+			physics->getBody()->applyCentralImpulse({0.f, physics->getMovementImpulse(), 0.f});
 			break;
 		case Direction::Down:
-			physics->getBody()->applyCentralImpulse({0.f, -physics->getImpulse(), 0.f});
+			physics->getBody()->applyCentralImpulse({0.f, -physics->getMovementImpulse(), 0.f});
 			break;
 		case Direction::Forward:
-			physics->getBody()->applyCentralImpulse({0.f, 0.f, -physics->getImpulse()});
+			physics->getBody()->applyCentralImpulse({0.f, 0.f, -physics->getMovementImpulse()});
 			break;
 		case Direction::Backward:
-			physics->getBody()->applyCentralImpulse({0.f, 0.f, physics->getImpulse()});
+			physics->getBody()->applyCentralImpulse({0.f, 0.f, physics->getMovementImpulse()});
 			break;
 		}
+	}
+}
+
+void PhysicsSystem::receive(const ChangeRotation& event)
+{
+	auto entity = event.entity;
+
+	auto physics = entity.component<PhysicsComponent>();
+
+	if (physics)
+	{
+		btQuaternion quaternion;
+		quaternion.setEuler(event.yaw * physics->getRotationImpulse(), event.pitch * physics->getRotationImpulse(),
+			event.roll * physics->getRotationImpulse());
+
+		physics->setRotation(quaternion);
 	}
 }

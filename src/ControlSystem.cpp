@@ -6,6 +6,7 @@ InversePalindrome.com
 
 
 #include "ControlSystem.hpp"
+#include "SceneComponent.hpp"
 #include "Events.hpp"
 
 
@@ -15,6 +16,22 @@ void ControlSystem::configure(entityx::EventManager& eventManager)
 }
 
 void ControlSystem::update(entityx::EntityManager& entityManager, entityx::EventManager& eventManager, entityx::TimeDelta deltaTime)
+{
+	this->handleKeyboardInput(eventManager);
+	this->handleMouseInput(eventManager);
+}
+
+void ControlSystem::receive(const entityx::ComponentAddedEvent<Player>& event)
+{
+	this->player = event.entity;
+}
+
+void ControlSystem::setInputManager(const InputManager* inputManager)
+{
+	this->inputManager = inputManager;
+}
+
+void ControlSystem::handleKeyboardInput(entityx::EventManager& eventManager)
 {
 	if (this->player.valid())
 	{
@@ -45,12 +62,8 @@ void ControlSystem::update(entityx::EntityManager& entityManager, entityx::Event
 	}
 }
 
-void ControlSystem::receive(const entityx::ComponentAddedEvent<Player>& event)
-{
-	this->player = event.entity;
-}
-
-void ControlSystem::setInputManager(const InputManager* inputManager)
-{
-	this->inputManager = inputManager;
-}
+void ControlSystem::handleMouseInput(entityx::EventManager& eventManager)
+{  
+	eventManager.emit(ChangeRotation{ this->player, static_cast<float>(this->inputManager->getMouseState().X.abs),
+		static_cast<float>(this->inputManager->getMouseState().Y.abs), static_cast<float>(this->inputManager->getMouseState().Z.abs) });
+};

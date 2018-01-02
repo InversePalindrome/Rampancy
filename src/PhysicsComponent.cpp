@@ -9,13 +9,15 @@ InversePalindrome.com
 #include "EnumUtility.hpp"
 
 
-PhysicsComponent::PhysicsComponent(Shape shape, btScalar mass, float impulse, float damping) :
+PhysicsComponent::PhysicsComponent(Shape shape, btScalar mass, float movementImpulse, float rotationImpulse, float movementDamping, float rotationDamping) :
 	Component("Physics"),
 	body(nullptr),
 	shape(shape),
 	mass(mass),
-	impulse(impulse),
-	damping(damping)
+	movementImpulse(movementImpulse),
+	rotationImpulse(rotationImpulse),
+	movementDamping(movementDamping),
+	rotationDamping(rotationDamping)
 {
 }
 
@@ -50,27 +52,55 @@ btScalar PhysicsComponent::getMass() const
 	return this->mass;
 }
 
-float PhysicsComponent::getImpulse() const
+float PhysicsComponent::getMovementImpulse() const
 {
-	return this->impulse;
+	return this->movementImpulse;
 }
 
-float PhysicsComponent::getDamping() const
+float PhysicsComponent::getRotationImpulse() const
 {
-	return this->damping;
+	return this->rotationImpulse;
+}
+
+float PhysicsComponent::getMovementDamping() const
+{
+	return this->movementDamping;
+}
+
+float PhysicsComponent::getRotationDamping() const
+{
+	return this->rotationDamping;
 }
 
 void PhysicsComponent::setBody(btRigidBody* body)
 {
 	this->body = body;
 	this->body->setActivationState(DISABLE_DEACTIVATION);
-	this->body->setDamping(this->damping, 0.f);
+	this->body->setDamping(this->movementDamping, this->rotationDamping);
+}
+
+void PhysicsComponent::setPosition(const btVector3& position)
+{
+	auto transform = this->body->getCenterOfMassTransform();
+	 
+	transform.setOrigin(position);
+
+	this->body->setCenterOfMassTransform(transform);
+}
+
+void PhysicsComponent::setRotation(const btQuaternion& rotation)
+{
+	auto transform = this->body->getCenterOfMassTransform();
+
+	transform.setRotation(rotation);
+
+	this->body->setCenterOfMassTransform(transform);
 }
 
 std::ostream& operator<<(std::ostream& os, const PhysicsComponent& component)
 {
-	os << "shape " << component.shape << " mass " << component.mass
-		<< " impulse " << component.impulse << " damping " << component.damping;
+	os << "shape " << component.shape << " mass " << component.mass << " movementImpulse " << component.movementImpulse <<
+		" rotationImpulse " << component.rotationImpulse << " movementDamping " << component.movementDamping << " rotationDamping " << component.rotationDamping;
 
 	return os;
 }

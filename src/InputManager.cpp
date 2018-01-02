@@ -14,6 +14,13 @@ InversePalindrome.com
 #include <RapidXML/rapidxml.hpp>
 
 
+InputManager::~InputManager()
+{
+	this->inputManager->destroyInputObject(this->keyboard);
+	this->inputManager->destroyInputObject(this->mouse);
+	this->inputManager->destroyInputSystem(this->inputManager);
+}
+
 void InputManager::setup(Ogre::RenderWindow* window)
 {
 	std::size_t windowHandle = 0u;
@@ -39,11 +46,9 @@ void InputManager::setup(Ogre::RenderWindow* window)
 	this->loadKeyBindings();
 }
 
-InputManager::~InputManager()
+const OIS::MouseState& InputManager::getMouseState() const
 {
-	this->inputManager->destroyInputObject(this->keyboard);
-	this->inputManager->destroyInputObject(this->mouse);
-	this->inputManager->destroyInputSystem(this->inputManager);
+	return this->mouse->getMouseState();
 }
 
 void InputManager::capture()
@@ -58,7 +63,7 @@ void InputManager::capture()
 void InputManager::setAction(Action action, OIS::KeyCode code)
 {
 	this->keyBindings[action] = code;
-}
+}  
 
 bool InputManager::keyPressed(const OIS::KeyEvent& event)
 {
