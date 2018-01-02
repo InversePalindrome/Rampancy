@@ -21,6 +21,8 @@ public:
 
 	void setVisible(bool visibilityStatus);
 
+	bool isVisible() const;
+
 private:
 	GameState* gameState;
 

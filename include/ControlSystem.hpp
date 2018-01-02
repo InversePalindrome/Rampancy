@@ -25,4 +25,7 @@ public:
 private:
 	const InputManager* inputManager;
 	entityx::Entity player;
+	                            
+	void handleKeyboardInput(entityx::EventManager& eventManager);
+	void handleMouseInput(entityx::EventManager& eventManager);
 };

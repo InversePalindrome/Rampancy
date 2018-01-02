@@ -11,6 +11,8 @@ InversePalindrome.com
 
 #include "OGRE/OgreSceneNode.h"
 
+#include <btQuaternion.h>
+
 #include <entityx/Entity.h>
 
 
@@ -28,4 +30,10 @@ struct ChangeDirection
 {
 	entityx::Entity entity;
 	Direction direction;
+};
+
+struct ChangeRotation
+{
+	entityx::Entity entity;
+	float yaw, pitch, roll;
 };

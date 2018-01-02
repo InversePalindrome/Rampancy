@@ -7,6 +7,8 @@ InversePalindrome.com
 
 #pragma once
 
+#include "XMLAttribute.hpp"
+
 #include <OGRE/OgreSceneManager.h>
 
 #include <entityx/entityx.h>
@@ -39,5 +41,5 @@ private:
 	Ogre::SceneManager* sceneManager;
 	Ogre::Camera* camera;
 
-	std::unordered_map<std::string, std::function<void(entityx::Entity&, const rapidxml::xml_node<char>*)>> parsers;
+	std::unordered_map<std::string, std::function<void(entityx::Entity&, const XMLAttribute& attribute)>> parsers;
 };

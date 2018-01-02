@@ -33,6 +33,7 @@ public:
 	virtual void update(entityx::EntityManager& entityManager, entityx::EventManager& eventManager, entityx::TimeDelta deltaTime) override;
 	virtual void receive(const CreatePhysicalBody& event);
 	virtual void receive(const ChangeDirection& event);
+	virtual void receive(const ChangeRotation& event);
 	
 private:
 	btBroadphaseInterface* broadPhase;

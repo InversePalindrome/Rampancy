@@ -25,8 +25,11 @@ public:
 	InputManager(const InputManager&) = delete;
 	InputManager& operator=(const InputManager&) = delete;
 
-	void setup(Ogre::RenderWindow* window);
 	~InputManager();
+
+	void setup(Ogre::RenderWindow* window);
+
+	const OIS::MouseState& getMouseState() const;
 
 	void capture();
 
