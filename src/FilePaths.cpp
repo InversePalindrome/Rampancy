@@ -12,3 +12,4 @@ extern std::string FP::data("Data/");
 extern std::string FP::entities(data + "Entities/");
 extern std::string FP::settings(data + "Settings/");
 extern std::string FP::savedGames(data + "SavedGames/");
+extern std::string FP::terrains(data + "Terrains/");

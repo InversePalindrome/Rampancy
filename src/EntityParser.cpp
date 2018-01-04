@@ -29,10 +29,11 @@ EntityParser::EntityParser(entityx::EntityManager& entityManager, entityx::Event
 {
 	parsers["Physics"] = [](auto& entity, const auto& attribute)
 	{
+		std::stringstream stream;
+
 		Shape shape;
 		float mass = 0.f, movementImpulse = 0.f, rotationImpulse = 0.f, movementDamping = 0.f, rotationDamping = 0.f;
 
-		std::stringstream stream;
 		stream << attribute.value<std::size_t>("shape") << ' ' << attribute.value<float>("mass") <<
 			' ' << attribute.value<float>("movementImpulse") << ' ' << attribute.value<float>("rotationImpulse") 
 			<< ' ' << attribute.value<float>("movementDamping") << ' ' << attribute.value<float>("rotationDamping");
@@ -52,8 +53,8 @@ EntityParser::EntityParser(entityx::EntityManager& entityManager, entityx::Event
 	};
 	parsers["Mesh2"] = [this](auto& entity, const auto& attribute)
 	{
-		Ogre::SceneManager::PrefabType prefabType;
 		std::stringstream stream;
+		Ogre::SceneManager::PrefabType prefabType;
 
 		stream << attribute.value<std::size_t>("prefabType");
 		stream >> prefabType;
@@ -64,8 +65,8 @@ EntityParser::EntityParser(entityx::EntityManager& entityManager, entityx::Event
 	};
 	parsers["Light"] = [this](auto& entity, const auto& attribute)
 	{
-		Ogre::Light::LightTypes type;
 		std::stringstream stream;
+		Ogre::Light::LightTypes type;
 
 		stream << attribute.value<std::size_t>("type");
 		stream >> type;
@@ -77,8 +78,8 @@ EntityParser::EntityParser(entityx::EntityManager& entityManager, entityx::Event
 	};
 	parsers["Object"] = [](auto& entity, const auto& attribute)
 	{
-		ObjectType type;
 		std::stringstream stream;
+		ObjectType type;
 
 		stream << attribute.value<std::size_t>("type");
 		stream >> type;
@@ -189,7 +190,7 @@ void EntityParser::parseEntities(ParsingMode mode, const std::string& fileName)
 			}
 
 			auto scene = entity.component<SceneComponent>();
-
+			
 			if (scene)
 			{
 				scene->getSceneNode()->setPosition({ xPos, yPos, zPos });

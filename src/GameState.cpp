@@ -54,6 +54,9 @@ void GameState::OnEnter()
 		this->entityParser.parseEntities(ParsingMode::Group, '/'+ this->getGames().getCurrentGame().getName() + "/Entities.xml");
 	}
 
+	this->terrainBuilder.setSceneManager(this->getSceneManager());
+	this->terrainBuilder.loadTerrain("TerrainInfo.xml");
+
 	this->pauseDisplay.initialise(this);
 	this->pauseDisplay.setVisible(false);
 }
