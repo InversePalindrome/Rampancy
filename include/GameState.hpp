@@ -10,6 +10,7 @@ InversePalindrome.com
 #include "State.hpp"
 #include "EntityParser.hpp"
 #include "EntitySerializer.hpp"
+#include "TerrainBuilder.hpp"
 #include "PauseDisplay.hpp"
 
 #include <entityx/entityx.h>
@@ -34,6 +35,8 @@ private:
 
 	EntityParser entityParser;
 	EntitySerializer entitySerializer;
+
+	TerrainBuilder terrainBuilder;
 
 	PauseDisplay pauseDisplay;
 };

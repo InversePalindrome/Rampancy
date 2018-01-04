@@ -16,4 +16,5 @@ namespace FP
 	extern std::string entities;
 	extern std::string settings;
 	extern std::string savedGames;
+	extern std::string terrains;
 }
