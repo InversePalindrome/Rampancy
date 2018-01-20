@@ -29,18 +29,23 @@ void StartState::OnEnter()
 	lightNode->attachObject(light);
 	lightNode->setDirection(0, 0, -1);
 	lightNode->setPosition({ 0, 0, 200 });
+
+	this->startListener = std::make_shared<StartStateListener>();
+	this->getEventBus().reg(this->startListener);
 }
 
 void StartState::OnExit()
 {
 	this->getGui()->destroyWidget(this->startText);
 	this->getSceneManager()->clearScene();
+
+	this->getEventBus().unreg(this->startListener);
 }
 
 
 hsm::Transition StartState::GetTransition() 
 {
-	if (this->getStateTransition() == StateTransition::Menu)
+	if (this->startListener->isKeyPressed)
 	{
 		return hsm::SiblingTransition<MenuState>();
 	}
@@ -50,10 +55,5 @@ hsm::Transition StartState::GetTransition()
 
 void StartState::Update()
 {
-	if (this->getInputManager().isKeyPressed())
-	{
-		this->setStateTransition(StateTransition::Menu);
-	}
-
 	this->getSceneManager()->getSceneNode("Ogre")->rotate(Ogre::Vector3::UNIT_Y, Ogre::Degree(0.1f));
 }

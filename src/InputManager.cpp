@@ -12,10 +12,43 @@ InversePalindrome.com
 #include <MYGUI/MyGUI_InputManager.h>
 
 #include <RapidXML/rapidxml.hpp>
+#include <RapidXML/rapidxml_print.hpp>
 
+
+InputManager::InputManager(EventBus& eventBus) :
+	eventBus(eventBus)
+{
+}
 
 InputManager::~InputManager()
 {
+	rapidxml::xml_document<> doc;
+
+	auto* decl = doc.allocate_node(rapidxml::node_declaration);
+	decl->append_attribute(doc.allocate_attribute("version", "1.0"));
+	decl->append_attribute(doc.allocate_attribute("encoding", "UTF-8"));
+	doc.append_node(decl);
+
+	auto* settingsNode = doc.allocate_node(rapidxml::node_element, "Settings");
+
+	for (const auto& keyBinding : this->keyBindings)
+	{
+		auto* keyNode = doc.allocate_node(rapidxml::node_element, "Key");
+
+		keyNode->append_attribute(doc.allocate_attribute("action", 
+        doc.allocate_string(std::to_string(static_cast<std::size_t>(keyBinding.first)).c_str())));
+		keyNode->append_attribute(doc.allocate_attribute("code",
+	    doc.allocate_string(std::to_string(static_cast<std::size_t>(keyBinding.second)).c_str())));
+
+		settingsNode->append_node(keyNode);
+	}
+
+	doc.append_node(settingsNode);
+
+	std::ofstream outFile(FP::settings + this->fileName);
+
+	outFile << doc;
+
 	this->inputManager->destroyInputObject(this->keyboard);
 	this->inputManager->destroyInputObject(this->mouse);
 	this->inputManager->destroyInputSystem(this->inputManager);
@@ -43,7 +76,7 @@ void InputManager::setup(Ogre::RenderWindow* window)
 	this->keyboard->setEventCallback(this);
 	this->mouse->setEventCallback(this);
 
-	this->loadKeyBindings();
+	this->loadKeyBindings("actions.xml");
 }
 
 const OIS::MouseState& InputManager::getMouseState() const
@@ -68,6 +101,8 @@ void InputManager::setAction(Action action, OIS::KeyCode code)
 bool InputManager::keyPressed(const OIS::KeyEvent& event)
 {
 	MyGUI::InputManager::getInstance().injectKeyPress(MyGUI::KeyCode::Enum(event.key), event.text);
+
+	this->eventBus.publish<KeyPressed>(event.key);
 	
 	return true;
 }
@@ -110,26 +145,12 @@ bool InputManager::isActive(Action action) const
 	return false;
 }
 
-bool InputManager::isKeyPressed() const
+void InputManager::loadKeyBindings(const std::string& fileName)
 {
-	if (this->keyboard)
-	{
-		for (std::size_t i = OIS::KeyCode::KC_UNASSIGNED; i <= OIS::KC_MEDIASELECT; ++i)
-		{
-			if (this->keyboard->isKeyDown(static_cast<OIS::KeyCode>(i)))
-			{
-				return true;
-			}
-		}
-	}
-	
-	return false;
-}
+	this->fileName = fileName;
 
-void InputManager::loadKeyBindings()
-{
 	rapidxml::xml_document<> doc;
-	std::ifstream inFile(FP::settings + "actions.xml");
+	std::ifstream inFile(FP::settings + fileName);
 	std::ostringstream buffer;
 
 	buffer << inFile.rdbuf();
@@ -138,11 +159,11 @@ void InputManager::loadKeyBindings()
 	std::string content(buffer.str());
 	doc.parse<0>(&content[0]);
 
-	auto* rootNode = doc.first_node("Settings");
+	const auto* rootNode = doc.first_node("Settings");
 
 	if (rootNode)
 	{
-		for (auto* node = rootNode->first_node("Key"); node; node = node->next_sibling())
+		for (const auto* node = rootNode->first_node("Key"); node; node = node->next_sibling())
 		{
 			Action action;
 			OIS::KeyCode keyCode;

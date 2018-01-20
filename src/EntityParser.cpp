@@ -12,7 +12,7 @@ InversePalindrome.com
 #include "ObjectComponent.hpp"
 #include "CameraComponent.hpp"
 #include "SceneComponent.hpp"
-#include "Events.hpp"
+#include "EntityEvents.hpp"
 #include "Tags.hpp"
 #include "FilePaths.hpp"
 #include "EnumUtility.hpp"
@@ -98,6 +98,11 @@ EntityParser::EntityParser(entityx::EntityManager& entityManager, entityx::Event
 
 void EntityParser::parseEntity(entityx::Entity& entity, const std::string& fileName)
 {
+	if (!this->sceneManager || !this->camera)
+	{
+		return;
+	}
+
 	rapidxml::xml_document<> doc;
 	std::ifstream inFile(FP::entities + fileName);
 	std::ostringstream buffer;

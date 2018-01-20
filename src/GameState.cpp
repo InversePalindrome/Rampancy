@@ -57,6 +57,9 @@ void GameState::OnEnter()
 	this->terrainBuilder.setSceneManager(this->getSceneManager());
 	this->terrainBuilder.loadTerrain("TerrainInfo.xml");
 
+	this->skyBuilder.setSceneManager(this->getSceneManager());
+	this->skyBuilder.loadSky("Sky.xml");
+
 	this->pauseDisplay.initialise(this);
 	this->pauseDisplay.setVisible(false);
 }

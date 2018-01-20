@@ -9,7 +9,6 @@ InversePalindrome.com
 #include "MeshComponent.hpp"
 #include "CameraComponent.hpp"
 #include "LightComponent.hpp"
-#include "Events.hpp"
 
 
 void GraphicsSystem::configure(entityx::EventManager& eventManager)
@@ -32,27 +31,26 @@ void GraphicsSystem::receive(const EntityParsed& event)
 
 	if (scene)
 	{
+		scene->setSceneNode(this->sceneManager->getRootSceneNode()->createChildSceneNode());
+
 		auto camera = entity.component<CameraComponent>();
 		auto mesh = entity.component<MeshComponent>();
 		auto light = entity.component<LightComponent>();
 
 	    if (camera)
-	    {
-		    scene->setSceneNode(this->sceneManager->getRootSceneNode()->createChildSceneNode());
+		{
 		    scene->getSceneNode()->attachObject(camera->getCamera());
 			
 		    this->eventManager->emit(CreatePhysicalBody{ entity });
 	    }
 		else if (mesh)
 		{
-			scene->setSceneNode(this->sceneManager->getRootSceneNode()->createChildSceneNode());
 			scene->getSceneNode()->attachObject(mesh->getEntity());
 
 			this->eventManager->emit(CreatePhysicalBody{ entity });
 		}
 		else if (light)
 		{
-			scene->setSceneNode(this->sceneManager->getRootSceneNode()->createChildSceneNode());
 			scene->getSceneNode()->attachObject(light->getLight());
 		}
 	}

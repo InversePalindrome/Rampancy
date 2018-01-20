@@ -23,6 +23,11 @@ TerrainBuilder::~TerrainBuilder()
 
 void TerrainBuilder::loadTerrain(const std::string& fileName)
 {
+	if (!this->sceneManager)
+	{
+		return;
+	}
+
 	rapidxml::xml_document<> doc;
 	std::ifstream inFile(FP::terrains + fileName);
 	std::ostringstream buffer;
@@ -46,9 +51,10 @@ void TerrainBuilder::loadTerrain(const std::string& fileName)
 			delete this->terrainOptions;
 		}
 
-		const auto* node = doc.first_node("Size");
+		const auto* node = rootNode->first_node("Size");
 
-		float terrainSize = 0.f, worldSize = 0.f;
+		std::size_t terrainSize = 0u;
+		float worldSize = 0.f;
 
 		if (node)
 		{
@@ -57,7 +63,7 @@ void TerrainBuilder::loadTerrain(const std::string& fileName)
 			stream >> terrainSize >> worldSize;
 		}
 
-		node = doc.first_node("Alignment");
+		node = rootNode->first_node("Alignment");
 
 		Ogre::Terrain::Alignment alignmentType = Ogre::Terrain::ALIGN_X_Y;
 

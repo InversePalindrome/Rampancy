@@ -33,14 +33,19 @@ InputManager& State::getInputManager()
 	return reinterpret_cast<Application*>(GetStateMachine().GetOwner())->inputManager;
 }
 
-StateTransition State::getStateTransition() 
+EventBus& State::getEventBus()
 {
-	return reinterpret_cast<Application*>(GetStateMachine().GetOwner())->stateTransition;
+	return reinterpret_cast<Application*>(GetStateMachine().GetOwner())->eventBus;
 }
 
 Games& State::getGames()
 {
 	return reinterpret_cast<Application*>(GetStateMachine().GetOwner())->games;
+}
+
+StateTransition State::getStateTransition()
+{
+	return reinterpret_cast<Application*>(GetStateMachine().GetOwner())->stateTransition;
 }
 
 void State::setShutdown(bool shutdown)

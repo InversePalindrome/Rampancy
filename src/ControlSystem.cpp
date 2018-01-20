@@ -7,7 +7,7 @@ InversePalindrome.com
 
 #include "ControlSystem.hpp"
 #include "SceneComponent.hpp"
-#include "Events.hpp"
+#include "EntityEvents.hpp"
 
 
 void ControlSystem::configure(entityx::EventManager& eventManager)

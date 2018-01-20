@@ -19,6 +19,7 @@ Application::Application() :
 	camera(nullptr),
 	gui(new MyGUI::Gui()),
 	guiPlatform(new MyGUI::OgrePlatform()),
+	inputManager(eventBus),
     stateTransition(StateTransition::None),
 	games("SavedGames.xml"),
 	shutdown(false)
@@ -104,7 +105,7 @@ void Application::initialise()
 
 	this->guiPlatform->initialise(window, sceneManager);
 	this->gui->initialise();
-
+	
 	this->stateMachine.Initialize<SplashState>(this);
 }
 

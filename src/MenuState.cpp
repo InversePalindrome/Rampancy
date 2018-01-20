@@ -54,8 +54,6 @@ void MenuState::OnEnter()
 	addButton->setCaption("Add");
 	addButton->eventMouseButtonClick += MyGUI::newDelegate(this, &MenuState::addGame);
 	addButton->attachToWidget(newGameWindow);
-
-	this->newGameWindow->setVisible(false);
 	
 	this->loadGameWindow = this->getGui()->createWidget<MyGUI::Window>("WindowCSX", 450, 150, 300, 325, MyGUI::Align::Default, "Main");
 	this->loadGameWindow->setCaption("Load Game");
@@ -80,6 +78,7 @@ void MenuState::OnEnter()
 	deleteButton->attachToWidget(loadGameWindow);
 
 	this->loadGameWindow->setVisible(false);
+	this->newGameWindow->setVisible(false);
 }
 
 void MenuState::OnExit()
