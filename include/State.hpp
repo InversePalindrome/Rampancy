@@ -20,8 +20,9 @@ public:
 	Ogre::Camera* getCamera();
 	Ogre::SceneManager* getSceneManager();
 	InputManager& getInputManager();
-	StateTransition getStateTransition();
+	EventBus& getEventBus();
 	Games& getGames();
+	StateTransition getStateTransition();
 
 	void setShutdown(bool shutdown);
 	void setStateTransition(StateTransition stateTransition);

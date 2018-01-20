@@ -18,6 +18,8 @@ class XMLAttribute
 public:
 	explicit XMLAttribute(const rapidxml::xml_node<char>* xmlNode);
 
+	std::string value(const std::string& name, const std::string& optionalValue);
+
 	template<typename T>
 	std::string value(const std::string& name) const;
 

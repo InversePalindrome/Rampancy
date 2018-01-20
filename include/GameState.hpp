@@ -11,6 +11,7 @@ InversePalindrome.com
 #include "EntityParser.hpp"
 #include "EntitySerializer.hpp"
 #include "TerrainBuilder.hpp"
+#include "SkyBuilder.hpp"
 #include "PauseDisplay.hpp"
 
 #include <entityx/entityx.h>
@@ -37,6 +38,7 @@ private:
 	EntitySerializer entitySerializer;
 
 	TerrainBuilder terrainBuilder;
+	SkyBuilder skyBuilder;
 
 	PauseDisplay pauseDisplay;
 };

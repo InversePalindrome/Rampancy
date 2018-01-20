@@ -7,6 +7,7 @@ InversePalindrome.com
 
 #pragma once
 
+#include "Events.hpp"
 #include "Actions.hpp"
 
 #include <OGRE/OgreRenderWindow.h>
@@ -21,7 +22,7 @@ InversePalindrome.com
 class InputManager : public OIS::KeyListener, public OIS::MouseListener
 {
 public:
-	InputManager() = default;
+	InputManager(EventBus& eventBus);
 	InputManager(const InputManager&) = delete;
 	InputManager& operator=(const InputManager&) = delete;
 
@@ -43,14 +44,16 @@ public:
 	virtual bool mouseReleased(const OIS::MouseEvent& event, OIS::MouseButtonID id) override;
 
 	bool isActive(Action action) const;
-	bool isKeyPressed() const;
 
-	void loadKeyBindings();
+	void loadKeyBindings(const std::string& fileName);
 
 private:
 	OIS::InputManager* inputManager;
 	OIS::Keyboard* keyboard;
 	OIS::Mouse* mouse;
 
+	std::string fileName;
 	std::unordered_map<Action, OIS::KeyCode> keyBindings;
+
+	EventBus& eventBus;
 };

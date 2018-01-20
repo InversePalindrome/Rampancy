@@ -7,7 +7,7 @@ InversePalindrome.com
 
 #pragma once
 
-#include "Events.hpp"
+#include "EntityEvents.hpp"
 #include "MeshComponent.hpp"
 #include "CameraComponent.hpp"
 #include "CollisionHandler.hpp"

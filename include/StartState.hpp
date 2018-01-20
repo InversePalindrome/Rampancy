@@ -8,8 +8,11 @@ InversePalindrome.com
 #pragma once
 
 #include "State.hpp"
+#include "StartStateListener.hpp"
 
 #include <MYGUI/MyGUI_TextBox.h>
+
+#include <memory>
 
 
 class StartState : public State
@@ -24,4 +27,6 @@ public:
 
 private:
 	MyGUI::TextBox* startText;
+
+	std::shared_ptr<StartStateListener> startListener;
 };

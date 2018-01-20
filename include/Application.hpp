@@ -8,6 +8,7 @@ InversePalindrome.com
 #pragma once
 
 #include "Games.hpp"
+#include "Events.hpp"
 #include "InputManager.hpp"
 #include "StateTransitions.hpp"
 
@@ -48,10 +49,10 @@ private:
 	MyGUI::Gui* gui;
 	MyGUI::OgrePlatform* guiPlatform;
 
+	EventBus eventBus;
 	InputManager inputManager;
 
 	hsm::StateMachine stateMachine;
-
 	StateTransition stateTransition;
 
 	Games games;

@@ -8,7 +8,7 @@ InversePalindrome.com
 #pragma once
 
 #include "SceneComponent.hpp"
-#include "Events.hpp"
+#include "EntityEvents.hpp"
 
 #include <OGRE/OgreSceneManager.h>
 

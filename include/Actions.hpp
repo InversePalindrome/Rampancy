@@ -10,5 +10,5 @@ InversePalindrome.com
 
 enum class Action
 {
-	Quit, MoveLeft, MoveRight, MoveUp, MoveDown, MoveForward, MoveBackward
+	Quit, MoveUp, MoveDown, MoveRight, MoveLeft, MoveForward, MoveBackward, None
 };

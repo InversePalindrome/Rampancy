@@ -7,33 +7,20 @@ InversePalindrome.com
 
 #pragma once
 
-#include "Direction.hpp"
+#include <bus.hpp>
+#include <event.hpp>
 
-#include "OGRE/OgreSceneNode.h"
-
-#include <btQuaternion.h>
-
-#include <entityx/Entity.h>
+#include <OIS/OISKeyboard.h>
 
 
-struct EntityParsed
+struct KeyPressed
 {
-	entityx::Entity entity;
+	KeyPressed(OIS::KeyCode keyCode) :
+		keyCode(keyCode)
+	{
+	}
+
+	OIS::KeyCode keyCode;
 };
 
-struct CreatePhysicalBody
-{
-	entityx::Entity entity;
-};
-
-struct ChangeDirection
-{
-	entityx::Entity entity;
-	Direction direction;
-};
-
-struct ChangeRotation
-{
-	entityx::Entity entity;
-	float yaw, pitch, roll;
-};
+using EventBus = eventpp::Bus<KeyPressed>;
