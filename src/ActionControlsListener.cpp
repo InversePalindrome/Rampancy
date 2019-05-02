@@ -9,12 +9,12 @@ InversePalindrome.com
 
 
 ActionControlsListener::ActionControlsListener(InputManager* inputManager) :
-	inputManager(inputManager),
-	currentAction(Action::None)
+    inputManager(inputManager),
+    currentAction(Action::None)
 {
 }
 
 void ActionControlsListener::receive(const KeyPressed& event)
 {
-	this->inputManager->setAction(this->currentAction, event.keyCode);
+    this->inputManager->setAction(this->currentAction, event.keyCode);
 }

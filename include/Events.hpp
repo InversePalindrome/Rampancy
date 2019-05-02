@@ -15,12 +15,12 @@ InversePalindrome.com
 
 struct KeyPressed
 {
-	KeyPressed(OIS::KeyCode keyCode) :
-		keyCode(keyCode)
-	{
-	}
+    KeyPressed(OIS::KeyCode keyCode) :
+        keyCode(keyCode)
+    {
+    }
 
-	OIS::KeyCode keyCode;
+    OIS::KeyCode keyCode;
 };
 
 using EventBus = eventpp::Bus<KeyPressed>;

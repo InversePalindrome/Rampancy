@@ -18,14 +18,14 @@ InversePalindrome.com
 class GraphicsSystem : public entityx::System<GraphicsSystem>, public entityx::Receiver<GraphicsSystem>
 {
 public:
-	virtual void configure(entityx::EventManager& eventManager) override;
-	virtual void update(entityx::EntityManager& entityManager, entityx::EventManager& eventManager, entityx::TimeDelta deltaTime) override;
+    virtual void configure(entityx::EventManager& eventManager) override;
+    virtual void update(entityx::EntityManager& entityManager, entityx::EventManager& eventManager, entityx::TimeDelta deltaTime) override;
 
-	virtual void receive(const EntityParsed& event);
+    virtual void receive(const EntityParsed& event);
 
-	void setSceneManager(Ogre::SceneManager* sceneManager);
+    void setSceneManager(Ogre::SceneManager* sceneManager);
 
 private:
-	Ogre::SceneManager* sceneManager;
-	entityx::EventManager* eventManager;
+    Ogre::SceneManager* sceneManager;
+    entityx::EventManager* eventManager;
 };

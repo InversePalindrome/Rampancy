@@ -18,15 +18,15 @@ InversePalindrome.com
 class StartState : public State
 {
 public:
-	virtual void OnEnter() override;
-	virtual void OnExit() override;
+    virtual void OnEnter() override;
+    virtual void OnExit() override;
 
-	virtual hsm::Transition GetTransition() override;
+    virtual hsm::Transition GetTransition() override;
 
-	virtual void Update() override;
+    virtual void Update() override;
 
 private:
-	MyGUI::TextBox* startText;
+    MyGUI::TextBox* startText;
 
-	std::shared_ptr<StartStateListener> startListener;
+    std::shared_ptr<StartStateListener> startListener;
 };

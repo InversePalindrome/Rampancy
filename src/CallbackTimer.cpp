@@ -9,14 +9,14 @@ InversePalindrome.com
 
 
 CallbackTimer::CallbackTimer() :
-	timer(io, boost::posix_time::milliseconds(0))
+    timer(io, boost::posix_time::milliseconds(0))
 {
 }
 
 CallbackTimer::~CallbackTimer()
 {
-	if (thread.joinable())
-	{
-		thread.join();
-	}
+    if (thread.joinable())
+    {
+        thread.join();
+    }
 }

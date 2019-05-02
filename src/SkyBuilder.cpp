@@ -18,82 +18,82 @@ InversePalindrome.com
 
 void SkyBuilder::loadSky(const std::string& fileName)
 {
-	if (!this->sceneManager)
-	{
-		return;
-	}
+    if (!this->sceneManager)
+    {
+        return;
+    }
 
-	rapidxml::xml_document<> doc;
-	std::ifstream inFile(FP::skies + fileName);
-	std::ostringstream buffer;
+    rapidxml::xml_document<> doc;
+    std::ifstream inFile(FP::skies + fileName);
+    std::ostringstream buffer;
 
-	buffer << inFile.rdbuf();
-	inFile.close();
+    buffer << inFile.rdbuf();
+    inFile.close();
 
-	std::string content(buffer.str());
-	doc.parse<0>(&content[0]);
+    std::string content(buffer.str());
+    doc.parse<0>(&content[0]);
 
-	const auto* rootNode = doc.first_node("Sky");
+    const auto * rootNode = doc.first_node("Sky");
 
-	if (rootNode)
-	{
-		const auto* node = rootNode->first_node("Box");
+    if (rootNode)
+    {
+        const auto* node = rootNode->first_node("Box");
 
-		if (node)
-		{
-			std::stringstream stream;
+        if (node)
+        {
+            std::stringstream stream;
 
-			std::string materialName;
-			float distance = 0.f;
+            std::string materialName;
+            float distance = 0.f;
 
-			stream << node->first_attribute("material")->value() << ' ' << node->first_attribute("distance")->value();
-			stream >> materialName >> distance;
-			
-			this->sceneManager->setSkyBox(true, materialName, distance);
-		}
+            stream << node->first_attribute("material")->value() << ' ' << node->first_attribute("distance")->value();
+            stream >> materialName >> distance;
 
-		node = rootNode->first_node("Dome");
+            this->sceneManager->setSkyBox(true, materialName, distance);
+        }
 
-		if (node)
-		{
-			std::stringstream stream;
+        node = rootNode->first_node("Dome");
 
-			std::string materialName;
-			float curvature = 0.f, tiling = 0.f, distance = 0.f;
+        if (node)
+        {
+            std::stringstream stream;
 
-			stream << node->first_attribute("material")->value() << ' ' << node->first_attribute("curvature")->value() << ' '
-				<< node->first_attribute("tiling")->value() << ' ' << node->first_attribute("distance")->value();
-			stream >> materialName >> curvature >> tiling >> distance;
+            std::string materialName;
+            float curvature = 0.f, tiling = 0.f, distance = 0.f;
 
-			this->sceneManager->setSkyDome(true, materialName, curvature, tiling, distance);
-		}
+            stream << node->first_attribute("material")->value() << ' ' << node->first_attribute("curvature")->value() << ' '
+                << node->first_attribute("tiling")->value() << ' ' << node->first_attribute("distance")->value();
+            stream >> materialName >> curvature >> tiling >> distance;
 
-		node = rootNode->first_node("Plane");
+            this->sceneManager->setSkyDome(true, materialName, curvature, tiling, distance);
+        }
 
-		if (node)
-		{
-			std::stringstream stream;
+        node = rootNode->first_node("Plane");
 
-			Ogre::Plane plane;
+        if (node)
+        {
+            std::stringstream stream;
 
-			std::string materialName;
-			float scale = 0.f, tiling = 0.f, distance = 0.f;
-			Vector normal;
+            Ogre::Plane plane;
 
-			stream << node->first_attribute("material")->value() << ' ' << node->first_attribute("scale")->value() << ' ' 
-				<< node->first_attribute("tiling")->value() << ' ' << node->first_attribute("distance")->value() << ' ' <<
-				node->first_attribute("normal")->value();
-			stream >> materialName >> scale >> tiling >> distance >> normal;
+            std::string materialName;
+            float scale = 0.f, tiling = 0.f, distance = 0.f;
+            Vector normal;
 
-			plane.d = distance;
-			plane.normal = Utility::getVector(normal);
-			
-			this->sceneManager->setSkyPlane(true, plane, materialName, scale, tiling);
-		}
-	}
+            stream << node->first_attribute("material")->value() << ' ' << node->first_attribute("scale")->value() << ' '
+                << node->first_attribute("tiling")->value() << ' ' << node->first_attribute("distance")->value() << ' ' <<
+                node->first_attribute("normal")->value();
+            stream >> materialName >> scale >> tiling >> distance >> normal;
+
+            plane.d = distance;
+            plane.normal = Utility::getVector(normal);
+
+            this->sceneManager->setSkyPlane(true, plane, materialName, scale, tiling);
+        }
+    }
 }
 
-void SkyBuilder::setSceneManager(Ogre::SceneManager* sceneManager) 
+void SkyBuilder::setSceneManager(Ogre::SceneManager* sceneManager)
 {
-	this->sceneManager = sceneManager;
+    this->sceneManager = sceneManager;
 }

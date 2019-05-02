@@ -15,5 +15,5 @@ enum class Vector { Zero, X, Y, Z, NegativeX, NegativeY, NegativeZ };
 
 namespace Utility
 {
-	Ogre::Vector3 getVector(Vector vector);
+    Ogre::Vector3 getVector(Vector vector);
 }

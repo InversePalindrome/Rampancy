@@ -9,11 +9,11 @@ InversePalindrome.com
 
 
 StartStateListener::StartStateListener() :
-	isKeyPressed(false)
+    isKeyPressed(false)
 {
 }
 
 void StartStateListener::receive(const KeyPressed& event)
 {
-	this->isKeyPressed = true;
+    this->isKeyPressed = true;
 }

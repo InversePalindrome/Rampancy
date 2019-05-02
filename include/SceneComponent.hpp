@@ -15,15 +15,15 @@ InversePalindrome.com
 class SceneComponent : public Component
 {
 public:
-	SceneComponent();
-	explicit SceneComponent(Ogre::SceneNode* sceneNode);
+    SceneComponent();
+    explicit SceneComponent(Ogre::SceneNode* sceneNode);
 
-	Ogre::SceneNode* getSceneNode();
-	Ogre::Vector3 getPosition() const;
-	Ogre::Quaternion getRotation() const;
+    Ogre::SceneNode* getSceneNode();
+    Ogre::Vector3 getPosition() const;
+    Ogre::Quaternion getRotation() const;
 
-	void setSceneNode(Ogre::SceneNode* sceneNode);
+    void setSceneNode(Ogre::SceneNode* sceneNode);
 
 private:
-	Ogre::SceneNode* sceneNode;
+    Ogre::SceneNode* sceneNode;
 };

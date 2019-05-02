@@ -20,25 +20,25 @@ InversePalindrome.com
 class GameState : public State
 {
 public:
-	GameState();
+    GameState();
 
-	virtual void OnEnter() override;
-	virtual void OnExit() override;
+    virtual void OnEnter() override;
+    virtual void OnExit() override;
 
-	virtual hsm::Transition GetTransition() override;
+    virtual hsm::Transition GetTransition() override;
 
-	virtual void Update() override;
+    virtual void Update() override;
 
 private:
-	entityx::EventManager eventManager;
-	entityx::EntityManager entityManager;
-	entityx::SystemManager systemManager;
+    entityx::EventManager eventManager;
+    entityx::EntityManager entityManager;
+    entityx::SystemManager systemManager;
 
-	EntityParser entityParser;
-	EntitySerializer entitySerializer;
+    EntityParser entityParser;
+    EntitySerializer entitySerializer;
 
-	TerrainBuilder terrainBuilder;
-	SkyBuilder skyBuilder;
+    TerrainBuilder terrainBuilder;
+    SkyBuilder skyBuilder;
 
-	PauseDisplay pauseDisplay;
+    PauseDisplay pauseDisplay;
 };

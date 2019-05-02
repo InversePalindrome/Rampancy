@@ -12,23 +12,23 @@ InversePalindrome.com
 
 template<typename T>
 typename std::enable_if<std::is_enum<T>::value, std::istream&>::type
-operator >>(std::istream &is, T& enumVar)
+operator >>(std::istream& is, T& enumVar)
 {
-	std::size_t value = 0u;
-	is >> value;
+    std::size_t value = 0u;
+    is >> value;
 
-	enumVar = static_cast<T>(value);
+    enumVar = static_cast<T>(value);
 
-	return is;
+    return is;
 }
 
 template<typename T>
-typename std::enable_if<std::is_enum<T>::value, std::ostream&>::type 
-operator <<(std::ostream &os, T& enumVar)
+typename std::enable_if<std::is_enum<T>::value, std::ostream&>::type
+operator <<(std::ostream& os, T& enumVar)
 {
-	auto value = static_cast<std::size_t>(enumVar);
-	
-	os << value;
-	
-	return os;
+    auto value = static_cast<std::size_t>(enumVar);
+
+    os << value;
+
+    return os;
 }

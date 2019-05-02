@@ -12,10 +12,10 @@ InversePalindrome.com
 
 namespace FP
 {
-	extern std::string data;
-	extern std::string entities;
-	extern std::string settings;
-	extern std::string savedGames;
-	extern std::string terrains;
-	extern std::string skies;
+    extern std::string data;
+    extern std::string entities;
+    extern std::string settings;
+    extern std::string savedGames;
+    extern std::string terrains;
+    extern std::string skies;
 }

@@ -7,35 +7,35 @@ InversePalindrome.com
 
 #include "SplashState.hpp"
 #include "StartState.hpp"
- 
+
 
 void SplashState::OnEnter()
 {
-	this->splashScreen = this->getGui()->createWidget<MyGUI::ImageBox>("ImageBox", this->getWindow()->getWidth() / 2 - 256, this->getWindow()->getHeight() / 2 - 128,
-		512, 256, MyGUI::Align::Default, "Main");
+    this->splashScreen = this->getGui()->createWidget<MyGUI::ImageBox>("ImageBox", this->getWindow()->getWidth() / 2 - 256, this->getWindow()->getHeight() / 2 - 128,
+        512, 256, MyGUI::Align::Default, "Main");
 
-	this->splashScreen->setImageTexture("InversePalindromeLogo.png");
+    this->splashScreen->setImageTexture("InversePalindromeLogo.png");
 
-	const auto splashTime = 2500u;
-	
-	this->splashTimer.addCallback([this](const auto& error)
-	{
-		this->setStateTransition(StateTransition::Start);
-	}
-	, splashTime);
+    const auto splashTime = 2500u;
+
+    this->splashTimer.addCallback([this](const auto & error)
+        {
+            this->setStateTransition(StateTransition::Start);
+        }
+    , splashTime);
 }
 
 void SplashState::OnExit()
 {
-	this->getGui()->destroyWidget(this->splashScreen);
+    this->getGui()->destroyWidget(this->splashScreen);
 }
 
 hsm::Transition SplashState::GetTransition()
 {
-	if (this->getStateTransition() == StateTransition::Start)
-	{
-		return hsm::SiblingTransition<StartState>();
-	}
+    if (this->getStateTransition() == StateTransition::Start)
+    {
+        return hsm::SiblingTransition<StartState>();
+    }
 
-	return hsm::NoTransition();
+    return hsm::NoTransition();
 }

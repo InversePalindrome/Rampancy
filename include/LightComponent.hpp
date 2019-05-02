@@ -15,13 +15,13 @@ InversePalindrome.com
 class LightComponent : public Component
 {
 public:
-	explicit LightComponent(Ogre::Light* light);
+    explicit LightComponent(Ogre::Light* light);
 
-	Ogre::Light* getLight();
-	Ogre::Light* getLight() const;
+    Ogre::Light* getLight();
+    Ogre::Light* getLight() const;
 
 private:
-	Ogre::Light* light;
+    Ogre::Light* light;
 };
 
 std::ostream& operator<<(std::ostream& os, const LightComponent& component);

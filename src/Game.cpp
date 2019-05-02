@@ -9,11 +9,11 @@ InversePalindrome.com
 
 
 Game::Game(const std::string& name) :
-	name(name)
+    name(name)
 {
 }
 
 std::string Game::getName() const
 {
-	return this->name;
+    return this->name;
 }

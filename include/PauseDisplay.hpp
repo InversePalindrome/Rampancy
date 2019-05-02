@@ -12,23 +12,23 @@ InversePalindrome.com
 
 class GameState;
 
-class PauseDisplay 
+class PauseDisplay
 {
 public:
-	~PauseDisplay();
+    ~PauseDisplay();
 
-	void initialise(GameState* gameState);
+    void initialise(GameState* gameState);
 
-	void setVisible(bool visibilityStatus);
+    void setVisible(bool visibilityStatus);
 
-	bool isVisible() const;
+    bool isVisible() const;
 
 private:
-	GameState* gameState;
+    GameState* gameState;
 
-	MyGUI::ButtonPtr resumeButton;
-	MyGUI::ButtonPtr quitButton;
+    MyGUI::ButtonPtr resumeButton;
+    MyGUI::ButtonPtr quitButton;
 
-	void transitionToGame(MyGUI::WidgetPtr resumeButton);
-	void transitionToMenu(MyGUI::WidgetPtr quitButton);
+    void transitionToGame(MyGUI::WidgetPtr resumeButton);
+    void transitionToMenu(MyGUI::WidgetPtr quitButton);
 };

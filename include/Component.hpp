@@ -13,12 +13,12 @@ InversePalindrome.com
 class Component
 {
 public:
-	explicit Component(const std::string& name);
+    explicit Component(const std::string& name);
 
-	std::string getName() const;
+    std::string getName() const;
 
 private:
-	std::string name;
+    std::string name;
 };
 
 

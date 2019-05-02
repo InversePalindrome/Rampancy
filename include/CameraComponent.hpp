@@ -16,10 +16,10 @@ InversePalindrome.com
 class CameraComponent : public Component
 {
 public:
-	explicit CameraComponent(Ogre::Camera* camera);
+    explicit CameraComponent(Ogre::Camera* camera);
 
-	Ogre::Camera* getCamera();
+    Ogre::Camera* getCamera();
 
 private:
-	Ogre::Camera* camera;
+    Ogre::Camera* camera;
 };

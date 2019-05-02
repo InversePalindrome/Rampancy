@@ -13,50 +13,50 @@ InversePalindrome.com
 
 void GraphicsSystem::configure(entityx::EventManager& eventManager)
 {
-	eventManager.subscribe<EntityParsed>(*this);
+    eventManager.subscribe<EntityParsed>(*this);
 
-	this->eventManager = &eventManager;
+    this->eventManager = &eventManager;
 }
 
 void GraphicsSystem::update(entityx::EntityManager& entityManager, entityx::EventManager& eventManager, entityx::TimeDelta deltaTime)
 {
-	
+
 }
 
 void GraphicsSystem::receive(const EntityParsed& event)
 {
-	auto entity = event.entity;
-	
-	auto scene = entity.component<SceneComponent>();
+    auto entity = event.entity;
 
-	if (scene)
-	{
-		scene->setSceneNode(this->sceneManager->getRootSceneNode()->createChildSceneNode());
+    auto scene = entity.component<SceneComponent>();
 
-		auto camera = entity.component<CameraComponent>();
-		auto mesh = entity.component<MeshComponent>();
-		auto light = entity.component<LightComponent>();
+    if (scene)
+    {
+        scene->setSceneNode(this->sceneManager->getRootSceneNode()->createChildSceneNode());
 
-	    if (camera)
-		{
-		    scene->getSceneNode()->attachObject(camera->getCamera());
-			
-		    this->eventManager->emit(CreatePhysicalBody{ entity });
-	    }
-		else if (mesh)
-		{
-			scene->getSceneNode()->attachObject(mesh->getEntity());
+        auto camera = entity.component<CameraComponent>();
+        auto mesh = entity.component<MeshComponent>();
+        auto light = entity.component<LightComponent>();
 
-			this->eventManager->emit(CreatePhysicalBody{ entity });
-		}
-		else if (light)
-		{
-			scene->getSceneNode()->attachObject(light->getLight());
-		}
-	}
+        if (camera)
+        {
+            scene->getSceneNode()->attachObject(camera->getCamera());
+
+            this->eventManager->emit(CreatePhysicalBody{ entity });
+        }
+        else if (mesh)
+        {
+            scene->getSceneNode()->attachObject(mesh->getEntity());
+
+            this->eventManager->emit(CreatePhysicalBody{ entity });
+        }
+        else if (light)
+        {
+            scene->getSceneNode()->attachObject(light->getLight());
+        }
+    }
 }
 
 void GraphicsSystem::setSceneManager(Ogre::SceneManager* sceneManager)
 {
-	this->sceneManager = sceneManager;
+    this->sceneManager = sceneManager;
 }

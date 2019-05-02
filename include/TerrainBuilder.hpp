@@ -16,14 +16,14 @@ InversePalindrome.com
 class TerrainBuilder
 {
 public:
-	~TerrainBuilder();
+    ~TerrainBuilder();
 
-	void loadTerrain(const std::string& fileName);
+    void loadTerrain(const std::string& fileName);
 
-	void setSceneManager(Ogre::SceneManager* sceneManager);
+    void setSceneManager(Ogre::SceneManager* sceneManager);
 
 private:
-	Ogre::SceneManager* sceneManager;
-	Ogre::TerrainGroup* terrainGroup;
-	Ogre::TerrainGlobalOptions* terrainOptions;
+    Ogre::SceneManager* sceneManager;
+    Ogre::TerrainGroup* terrainGroup;
+    Ogre::TerrainGlobalOptions* terrainOptions;
 };

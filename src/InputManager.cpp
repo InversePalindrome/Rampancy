@@ -16,163 +16,163 @@ InversePalindrome.com
 
 
 InputManager::InputManager(EventBus& eventBus) :
-	eventBus(eventBus)
+    eventBus(eventBus)
 {
 }
 
 InputManager::~InputManager()
 {
-	rapidxml::xml_document<> doc;
+    rapidxml::xml_document<> doc;
 
-	auto* decl = doc.allocate_node(rapidxml::node_declaration);
-	decl->append_attribute(doc.allocate_attribute("version", "1.0"));
-	decl->append_attribute(doc.allocate_attribute("encoding", "UTF-8"));
-	doc.append_node(decl);
+    auto* decl = doc.allocate_node(rapidxml::node_declaration);
+    decl->append_attribute(doc.allocate_attribute("version", "1.0"));
+    decl->append_attribute(doc.allocate_attribute("encoding", "UTF-8"));
+    doc.append_node(decl);
 
-	auto* settingsNode = doc.allocate_node(rapidxml::node_element, "Settings");
+    auto* settingsNode = doc.allocate_node(rapidxml::node_element, "Settings");
 
-	for (const auto& keyBinding : this->keyBindings)
-	{
-		auto* keyNode = doc.allocate_node(rapidxml::node_element, "Key");
+    for (const auto& keyBinding : this->keyBindings)
+    {
+        auto* keyNode = doc.allocate_node(rapidxml::node_element, "Key");
 
-		keyNode->append_attribute(doc.allocate_attribute("action", 
-        doc.allocate_string(std::to_string(static_cast<std::size_t>(keyBinding.first)).c_str())));
-		keyNode->append_attribute(doc.allocate_attribute("code",
-	    doc.allocate_string(std::to_string(static_cast<std::size_t>(keyBinding.second)).c_str())));
+        keyNode->append_attribute(doc.allocate_attribute("action",
+            doc.allocate_string(std::to_string(static_cast<std::size_t>(keyBinding.first)).c_str())));
+        keyNode->append_attribute(doc.allocate_attribute("code",
+            doc.allocate_string(std::to_string(static_cast<std::size_t>(keyBinding.second)).c_str())));
 
-		settingsNode->append_node(keyNode);
-	}
+        settingsNode->append_node(keyNode);
+    }
 
-	doc.append_node(settingsNode);
+    doc.append_node(settingsNode);
 
-	std::ofstream outFile(FP::settings + this->fileName);
+    std::ofstream outFile(FP::settings + this->fileName);
 
-	outFile << doc;
+    outFile << doc;
 
-	this->inputManager->destroyInputObject(this->keyboard);
-	this->inputManager->destroyInputObject(this->mouse);
-	this->inputManager->destroyInputSystem(this->inputManager);
+    this->inputManager->destroyInputObject(this->keyboard);
+    this->inputManager->destroyInputObject(this->mouse);
+    this->inputManager->destroyInputSystem(this->inputManager);
 }
 
-void InputManager::setup(Ogre::RenderWindow* window)
+void InputManager::setup(Ogre::RenderWindow * window)
 {
-	std::size_t windowHandle = 0u;
+    std::size_t windowHandle = 0u;
 
-	window->getCustomAttribute("WINDOW", &windowHandle);
-	
-	this->inputManager = OIS::InputManager::createInputSystem(windowHandle);
-	this->keyboard = static_cast<OIS::Keyboard*>(inputManager->createInputObject(OIS::OISKeyboard, true));
-	this->mouse = static_cast<OIS::Mouse*>(inputManager->createInputObject(OIS::OISMouse, true));
+    window->getCustomAttribute("WINDOW", &windowHandle);
 
-	std::size_t width = 0u, height = 0u, depth = 0u;
-	std::int32_t left = 0, top = 0;
+    this->inputManager = OIS::InputManager::createInputSystem(windowHandle);
+    this->keyboard = static_cast<OIS::Keyboard*>(inputManager->createInputObject(OIS::OISKeyboard, true));
+    this->mouse = static_cast<OIS::Mouse*>(inputManager->createInputObject(OIS::OISMouse, true));
 
-	window->getMetrics(width, height, depth, left, top);
+    std::size_t width = 0u, height = 0u, depth = 0u;
+    std::int32_t left = 0, top = 0;
 
-	const auto& mouseState = this->mouse->getMouseState();
-	mouseState.width = width;
-	mouseState.height = height;
+    window->getMetrics(width, height, depth, left, top);
 
-	this->keyboard->setEventCallback(this);
-	this->mouse->setEventCallback(this);
+    const auto& mouseState = this->mouse->getMouseState();
+    mouseState.width = width;
+    mouseState.height = height;
 
-	this->loadKeyBindings("actions.xml");
+    this->keyboard->setEventCallback(this);
+    this->mouse->setEventCallback(this);
+
+    this->loadKeyBindings("actions.xml");
 }
 
 const OIS::MouseState& InputManager::getMouseState() const
 {
-	return this->mouse->getMouseState();
+    return this->mouse->getMouseState();
 }
 
 void InputManager::capture()
 {
-	if (this->keyboard && this->mouse)
-	{
-		this->keyboard->capture();
-		this->mouse->capture();
-	}
+    if (this->keyboard && this->mouse)
+    {
+        this->keyboard->capture();
+        this->mouse->capture();
+    }
 }
 
 void InputManager::setAction(Action action, OIS::KeyCode code)
 {
-	this->keyBindings[action] = code;
-}  
-
-bool InputManager::keyPressed(const OIS::KeyEvent& event)
-{
-	MyGUI::InputManager::getInstance().injectKeyPress(MyGUI::KeyCode::Enum(event.key), event.text);
-
-	this->eventBus.publish<KeyPressed>(event.key);
-	
-	return true;
+    this->keyBindings[action] = code;
 }
 
-bool InputManager::keyReleased(const OIS::KeyEvent& event)
+bool InputManager::keyPressed(const OIS::KeyEvent & event)
 {
-	MyGUI::InputManager::getInstance().injectKeyRelease(MyGUI::KeyCode::Enum(event.key));
+    MyGUI::InputManager::getInstance().injectKeyPress(MyGUI::KeyCode::Enum(event.key), event.text);
 
-	return true;
+    this->eventBus.publish<KeyPressed>(event.key);
+
+    return true;
 }
 
-bool InputManager::mouseMoved(const OIS::MouseEvent& event)
+bool InputManager::keyReleased(const OIS::KeyEvent & event)
 {
-	MyGUI::InputManager::getInstance().injectMouseMove(event.state.X.abs, event.state.Y.abs, event.state.Z.abs);
+    MyGUI::InputManager::getInstance().injectKeyRelease(MyGUI::KeyCode::Enum(event.key));
 
-	return true;
+    return true;
 }
 
-bool InputManager::mousePressed(const OIS::MouseEvent& event, OIS::MouseButtonID id)
+bool InputManager::mouseMoved(const OIS::MouseEvent & event)
+{
+    MyGUI::InputManager::getInstance().injectMouseMove(event.state.X.abs, event.state.Y.abs, event.state.Z.abs);
+
+    return true;
+}
+
+bool InputManager::mousePressed(const OIS::MouseEvent & event, OIS::MouseButtonID id)
 {
     MyGUI::InputManager::getInstance().injectMousePress(event.state.X.abs, event.state.Y.abs, MyGUI::MouseButton::Enum(id));
 
-	return true;
+    return true;
 }
 
-bool InputManager::mouseReleased(const OIS::MouseEvent& event, OIS::MouseButtonID id)
+bool InputManager::mouseReleased(const OIS::MouseEvent & event, OIS::MouseButtonID id)
 {
-	MyGUI::InputManager::getInstance().injectMouseRelease(event.state.X.abs, event.state.Y.abs, MyGUI::MouseButton::Enum(id));
+    MyGUI::InputManager::getInstance().injectMouseRelease(event.state.X.abs, event.state.Y.abs, MyGUI::MouseButton::Enum(id));
 
-	return true;
+    return true;
 }
 
 bool InputManager::isActive(Action action) const
 {
-	if (this->keyboard)
-	{
-		return this->keyboard->isKeyDown(this->keyBindings.at(action));
-	}
+    if (this->keyboard)
+    {
+        return this->keyboard->isKeyDown(this->keyBindings.at(action));
+    }
 
-	return false;
+    return false;
 }
 
-void InputManager::loadKeyBindings(const std::string& fileName)
+void InputManager::loadKeyBindings(const std::string & fileName)
 {
-	this->fileName = fileName;
+    this->fileName = fileName;
 
-	rapidxml::xml_document<> doc;
-	std::ifstream inFile(FP::settings + fileName);
-	std::ostringstream buffer;
+    rapidxml::xml_document<> doc;
+    std::ifstream inFile(FP::settings + fileName);
+    std::ostringstream buffer;
 
-	buffer << inFile.rdbuf();
-	inFile.close();
+    buffer << inFile.rdbuf();
+    inFile.close();
 
-	std::string content(buffer.str());
-	doc.parse<0>(&content[0]);
+    std::string content(buffer.str());
+    doc.parse<0>(&content[0]);
 
-	const auto* rootNode = doc.first_node("Settings");
+    const auto * rootNode = doc.first_node("Settings");
 
-	if (rootNode)
-	{
-		for (const auto* node = rootNode->first_node("Key"); node; node = node->next_sibling())
-		{
-			Action action;
-			OIS::KeyCode keyCode;
+    if (rootNode)
+    {
+        for (const auto* node = rootNode->first_node("Key"); node; node = node->next_sibling())
+        {
+            Action action;
+            OIS::KeyCode keyCode;
 
-			std::stringstream stream;
-			stream << node->first_attribute("action")->value() << ' ' << node->first_attribute("code")->value();
-			stream >> action >> keyCode;
+            std::stringstream stream;
+            stream << node->first_attribute("action")->value() << ' ' << node->first_attribute("code")->value();
+            stream >> action >> keyCode;
 
-			this->keyBindings[action] = keyCode;
-		}
-	}
+            this->keyBindings[action] = keyCode;
+        }
+    }
 }

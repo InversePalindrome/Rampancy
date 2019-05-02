@@ -17,24 +17,24 @@ InversePalindrome.com
 class CallbackTimer
 {
 public:
-	CallbackTimer();
-	~CallbackTimer();
+    CallbackTimer();
+    ~CallbackTimer();
 
-	template<typename T>
-	void addCallback(T&& function, std::size_t timeInMilliseconds);
+    template<typename T>
+    void addCallback(T&& function, std::size_t timeInMilliseconds);
 
 private:
-	boost::asio::io_service io;
-	boost::asio::deadline_timer timer;
-	std::thread thread;
+    boost::asio::io_service io;
+    boost::asio::deadline_timer timer;
+    std::thread thread;
 };
 
 template<typename T>
 void CallbackTimer::addCallback(T&& function, std::size_t timeInMilliseconds)
 {
-	this->timer.expires_from_now(boost::posix_time::milliseconds(timeInMilliseconds));
+    this->timer.expires_from_now(boost::posix_time::milliseconds(timeInMilliseconds));
 
-	this->timer.async_wait(std::forward<T>(function));
+    this->timer.async_wait(std::forward<T>(function));
 
-	this->thread = std::thread([this]() { this->io.run(); });
+    this->thread = std::thread([this]() { this->io.run(); });
 }

@@ -19,4 +19,4 @@ InversePalindrome.com
 
 
 using Components = brigand::list<PhysicsComponent, ObjectComponent, SceneComponent, MeshComponent, LightComponent, CameraComponent,
-                                 Player>;
+    Player>;

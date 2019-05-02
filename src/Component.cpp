@@ -9,16 +9,16 @@ InversePalindrome.com
 
 
 Component::Component(const std::string& name) :
-	name(name)
+    name(name)
 {
 }
 
 std::string Component::getName() const
 {
-	return this->name;
+    return this->name;
 }
 
 std::ostream& operator<<(std::ostream& os, const Component& component)
 {
-	return os;
+    return os;
 }

@@ -19,15 +19,15 @@ InversePalindrome.com
 class CollisionHandler
 {
 public:
-	explicit CollisionHandler(btDispatcher* dispatcher);
+    explicit CollisionHandler(btDispatcher* dispatcher);
 
-	void update();
+    void update();
 
 private:
-	btDispatcher* dispatcher;
+    btDispatcher* dispatcher;
 
-	void handleCollision(entityx::Entity entityA, entityx::Entity entityB);
+    void handleCollision(entityx::Entity entityA, entityx::Entity entityB);
 
     boost::optional<std::pair<entityx::Entity, entityx::Entity>> collided(entityx::Entity entityA, entityx::Entity entityB,
-		ObjectType objectTypeA, ObjectType objectTypeB);
+        ObjectType objectTypeA, ObjectType objectTypeB);
 };

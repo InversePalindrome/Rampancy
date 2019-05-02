@@ -16,12 +16,12 @@ InversePalindrome.com
 class SplashState : public State
 {
 public:
-	virtual void OnEnter() override;
-	virtual void OnExit() override;
+    virtual void OnEnter() override;
+    virtual void OnExit() override;
 
-	virtual hsm::Transition GetTransition() override;
+    virtual hsm::Transition GetTransition() override;
 
 private:
-	MyGUI::ImageBox* splashScreen;
-	CallbackTimer splashTimer;
+    MyGUI::ImageBox* splashScreen;
+    CallbackTimer splashTimer;
 };

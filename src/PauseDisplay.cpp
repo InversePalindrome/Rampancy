@@ -13,42 +13,42 @@ InversePalindrome.com
 
 PauseDisplay::~PauseDisplay()
 {
-	this->gameState->getGui()->destroyWidget(this->resumeButton);
+    this->gameState->getGui()->destroyWidget(this->resumeButton);
     this->gameState->getGui()->destroyWidget(this->quitButton);
 }
 
 void PauseDisplay::initialise(GameState* gameState)
 {
-	this->gameState = gameState;
+    this->gameState = gameState;
 
-	this->resumeButton = this->gameState->getGui()->createWidget<MyGUI::Button>("Button", this->gameState->getWindow()->getWidth() / 2 - 125,
-		250, 250, 50, MyGUI::Align::Default, "Main");
-	this->resumeButton->setCaption("Resume");
-	this->resumeButton->eventMouseButtonClick += MyGUI::newDelegate(this, &PauseDisplay::transitionToGame);
+    this->resumeButton = this->gameState->getGui()->createWidget<MyGUI::Button>("Button", this->gameState->getWindow()->getWidth() / 2 - 125,
+        250, 250, 50, MyGUI::Align::Default, "Main");
+    this->resumeButton->setCaption("Resume");
+    this->resumeButton->eventMouseButtonClick += MyGUI::newDelegate(this, &PauseDisplay::transitionToGame);
 
-	this->quitButton = this->gameState->getGui()->createWidget<MyGUI::Button>("Button", this->gameState->getWindow()->getWidth() / 2 - 125,
-		350, 250, 50, MyGUI::Align::Default, "Main");
-	this->quitButton->setCaption("Quit");
-	this->quitButton->eventMouseButtonClick += MyGUI::newDelegate(this, &PauseDisplay::transitionToMenu);
+    this->quitButton = this->gameState->getGui()->createWidget<MyGUI::Button>("Button", this->gameState->getWindow()->getWidth() / 2 - 125,
+        350, 250, 50, MyGUI::Align::Default, "Main");
+    this->quitButton->setCaption("Quit");
+    this->quitButton->eventMouseButtonClick += MyGUI::newDelegate(this, &PauseDisplay::transitionToMenu);
 }
 
 void PauseDisplay::setVisible(bool visibilityStatus)
 {
-	this->resumeButton->setVisible(visibilityStatus);
-	this->quitButton->setVisible(visibilityStatus);
+    this->resumeButton->setVisible(visibilityStatus);
+    this->quitButton->setVisible(visibilityStatus);
 }
 
 bool PauseDisplay::isVisible() const
 {
-	return this->resumeButton->getVisible();
+    return this->resumeButton->getVisible();
 }
 
 void PauseDisplay::transitionToGame(MyGUI::WidgetPtr resumeButton)
 {
-	this->setVisible(false);
+    this->setVisible(false);
 }
 
 void PauseDisplay::transitionToMenu(MyGUI::WidgetPtr quitButton)
 {
-	this->gameState->setStateTransition(StateTransition::Menu);
+    this->gameState->setStateTransition(StateTransition::Menu);
 }

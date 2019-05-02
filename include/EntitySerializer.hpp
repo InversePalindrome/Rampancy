@@ -17,13 +17,13 @@ InversePalindrome.com
 class EntitySerializer
 {
 public:
-	explicit EntitySerializer(entityx::EntityManager& entityManager);
+    explicit EntitySerializer(entityx::EntityManager& entityManager);
 
-	void serialize(const std::string& fileName);
+    void serialize(const std::string& fileName);
 
 private:
-	entityx::EntityManager& entityManager;
-	tree<std::string> entities;
+    entityx::EntityManager& entityManager;
+    tree<std::string> entities;
 
-	void saveEntities();
+    void saveEntities();
 };

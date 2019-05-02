@@ -10,24 +10,24 @@ InversePalindrome.com
 
 
 ObjectComponent::ObjectComponent(ObjectType objectType) :
-	Component("Object"),
-	objectType(objectType)
+    Component("Object"),
+    objectType(objectType)
 {
 }
 
 ObjectType ObjectComponent::getObjectType() const
 {
-	return this->objectType;
+    return this->objectType;
 }
 
 void ObjectComponent::setObjectType(ObjectType objectType)
 {
-	this->objectType = objectType;
+    this->objectType = objectType;
 }
 
 std::ostream& operator<<(std::ostream& os, const ObjectComponent& component)
 {
-	os << "type " << component.objectType;
-	
-	return os;
+    os << "type " << component.objectType;
+
+    return os;
 }

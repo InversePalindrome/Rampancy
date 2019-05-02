@@ -13,11 +13,11 @@ InversePalindrome.com
 class Game
 {
 public:
-	Game() = default;
-	explicit Game(const std::string& name);
+    Game() = default;
+    explicit Game(const std::string& name);
 
-	std::string getName() const;
+    std::string getName() const;
 
 private:
-	std::string name;
+    std::string name;
 };

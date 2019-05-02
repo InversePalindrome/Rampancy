@@ -12,9 +12,9 @@ InversePalindrome.com
 
 struct StartStateListener
 {
-	StartStateListener();
+    StartStateListener();
 
-	void receive(const KeyPressed& event);
+    void receive(const KeyPressed& event);
 
-	bool isKeyPressed;
+    bool isKeyPressed;
 };

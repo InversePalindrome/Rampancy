@@ -13,10 +13,10 @@ InversePalindrome.com
 
 struct ActionControlsListener
 {
-	ActionControlsListener(InputManager* inputManager);
+    ActionControlsListener(InputManager* inputManager);
 
-	void receive(const KeyPressed& event);
+    void receive(const KeyPressed& event);
 
-	InputManager* inputManager;
-	Action currentAction;
+    InputManager* inputManager;
+    Action currentAction;
 };

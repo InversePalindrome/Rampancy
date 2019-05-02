@@ -29,43 +29,43 @@ InversePalindrome.com
 
 class Application : public Ogre::FrameListener, public Ogre::WindowEventListener
 {
-	friend class State;
+    friend class State;
 
 public:
-	Application();
-	Application(const Application&) = delete;
-	Application& operator=(const Application&) = delete;
+    Application();
+    Application(const Application&) = delete;
+    Application& operator=(const Application&) = delete;
 
-	~Application();
+    ~Application();
 
-	void run();
+    void run();
 
 private:
-	Ogre::Root* root;
-	Ogre::RenderWindow* window;
-	Ogre::SceneManager* sceneManager;
-	Ogre::Camera* camera;
+    Ogre::Root* root;
+    Ogre::RenderWindow* window;
+    Ogre::SceneManager* sceneManager;
+    Ogre::Camera* camera;
 
-	MyGUI::Gui* gui;
-	MyGUI::OgrePlatform* guiPlatform;
+    MyGUI::Gui* gui;
+    MyGUI::OgrePlatform* guiPlatform;
 
-	EventBus eventBus;
-	InputManager inputManager;
+    EventBus eventBus;
+    InputManager inputManager;
 
-	hsm::StateMachine stateMachine;
-	StateTransition stateTransition;
+    hsm::StateMachine stateMachine;
+    StateTransition stateTransition;
 
-	Games games;
+    Games games;
 
-	bool shutdown;
-	bool isConfigured;
+    bool shutdown;
+    bool isConfigured;
 
-	void handleEvent();
-	void update();
-	void render();
+    void handleEvent();
+    void update();
+    void render();
 
-	bool configure();
-	void initialise();
-	void loadResources();
-	void addCamera();
+    bool configure();
+    void initialise();
+    void loadResources();
+    void addCamera();
 };

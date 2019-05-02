@@ -7,34 +7,34 @@ InversePalindrome.com
 
 #include "SceneComponent.hpp"
 
- 
+
 SceneComponent::SceneComponent() :
-	SceneComponent(nullptr)
+    SceneComponent(nullptr)
 {
 }
 
 SceneComponent::SceneComponent(Ogre::SceneNode* sceneNode) :
-	Component("Scene"),
-	sceneNode(sceneNode)
+    Component("Scene"),
+    sceneNode(sceneNode)
 {
 }
 
 Ogre::SceneNode* SceneComponent::getSceneNode()
 {
-	return this->sceneNode;
+    return this->sceneNode;
 }
 
 Ogre::Vector3 SceneComponent::getPosition() const
 {
-	return this->sceneNode->getPosition();
+    return this->sceneNode->getPosition();
 }
 
 Ogre::Quaternion SceneComponent::getRotation() const
 {
-	return this->sceneNode->getOrientation();
+    return this->sceneNode->getOrientation();
 }
 
 void SceneComponent::setSceneNode(Ogre::SceneNode* sceneNode)
 {
-	this->sceneNode = sceneNode;
+    this->sceneNode = sceneNode;
 }

@@ -9,12 +9,12 @@ InversePalindrome.com
 
 
 CameraComponent::CameraComponent(Ogre::Camera* camera) :
-	Component("Camera"),
-	camera(camera)
+    Component("Camera"),
+    camera(camera)
 {
 }
 
 Ogre::Camera* CameraComponent::getCamera()
 {
-	return this->camera;
+    return this->camera;
 }

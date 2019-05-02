@@ -15,10 +15,10 @@ InversePalindrome.com
 class SkyBuilder
 {
 public:
-	void loadSky(const std::string& fileName);
-	
-	void setSceneManager(Ogre::SceneManager* sceneManager);
+    void loadSky(const std::string& fileName);
+
+    void setSceneManager(Ogre::SceneManager* sceneManager);
 
 private:
-	Ogre::SceneManager* sceneManager;
+    Ogre::SceneManager* sceneManager;
 };

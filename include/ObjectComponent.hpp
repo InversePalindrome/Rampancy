@@ -13,17 +13,17 @@ InversePalindrome.com
 
 class ObjectComponent : public Component
 {
-	friend std::ostream& operator<<(std::ostream& os, const ObjectComponent& component);
+    friend std::ostream& operator<<(std::ostream& os, const ObjectComponent& component);
 
 public:
-	explicit ObjectComponent(ObjectType objectType);
+    explicit ObjectComponent(ObjectType objectType);
 
-	ObjectType getObjectType() const;
+    ObjectType getObjectType() const;
 
-	void setObjectType(ObjectType objectType);
+    void setObjectType(ObjectType objectType);
 
 private:
-	ObjectType objectType;
+    ObjectType objectType;
 };
 
 std::ostream& operator<<(std::ostream& os, const ObjectComponent& component);

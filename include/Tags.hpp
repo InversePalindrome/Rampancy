@@ -10,10 +10,10 @@ InversePalindrome.com
 #include "Component.hpp"
 
 
-struct Player : public Component 
+struct Player : public Component
 {
-	Player() :
-		Component("Player")
-	{
-	}
+    Player() :
+        Component("Player")
+    {
+    }
 };

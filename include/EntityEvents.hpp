@@ -18,22 +18,22 @@ InversePalindrome.com
 
 struct EntityParsed
 {
-	entityx::Entity entity;
+    entityx::Entity entity;
 };
 
 struct CreatePhysicalBody
 {
-	entityx::Entity entity;
+    entityx::Entity entity;
 };
 
 struct ChangeDirection
 {
-	entityx::Entity entity;
-	Direction direction;
+    entityx::Entity entity;
+    Direction direction;
 };
 
 struct ChangeRotation
 {
-	entityx::Entity entity;
-	float yaw, pitch, roll;
+    entityx::Entity entity;
+    float yaw, pitch, roll;
 };

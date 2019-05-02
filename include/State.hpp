@@ -15,15 +15,15 @@ InversePalindrome.com
 class State : public hsm::State
 {
 public:
-	Ogre::RenderWindow* getWindow();
-	MyGUI::Gui* getGui();
-	Ogre::Camera* getCamera();
-	Ogre::SceneManager* getSceneManager();
-	InputManager& getInputManager();
-	EventBus& getEventBus();
-	Games& getGames();
-	StateTransition getStateTransition();
+    Ogre::RenderWindow* getWindow();
+    MyGUI::Gui* getGui();
+    Ogre::Camera* getCamera();
+    Ogre::SceneManager* getSceneManager();
+    InputManager& getInputManager();
+    EventBus& getEventBus();
+    Games& getGames();
+    StateTransition getStateTransition();
 
-	void setShutdown(bool shutdown);
-	void setStateTransition(StateTransition stateTransition);
+    void setShutdown(bool shutdown);
+    void setStateTransition(StateTransition stateTransition);
 };
